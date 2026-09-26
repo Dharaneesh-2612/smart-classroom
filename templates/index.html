@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Smart Classroom Dashboard</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .dashboard {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .card {
+            display: inline-block;
+            background: white;
+            padding: 25px;
+            margin: 10px;
+            width: 180px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+        }
+
+        .value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="dashboard">
+
+        <h1>Smart Classroom Dashboard</h1>
+
+        <div class="card">
+            <h3>Temperature</h3>
+            <div class="value" id="temperature">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Humidity</h3>
+            <div class="value" id="humidity">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Zone 1</h3>
+            <div class="value" id="zone1">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Zone 2</h3>
+            <div class="value" id="zone2">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Zone 3</h3>
+            <div class="value" id="zone3">--</div>
+        </div>
+
+        <div class="card">
+            <h3>Fan</h3>
+            <div class="value" id="fan">--</div>
+        </div>
+
+        <div class="card">
+            <h3>AC</h3>
+            <div class="value" id="ac">--</div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        async function updateDashboard() {
+
+            try {
+
+                const response = await fetch("/api/data");
+
+                const data = await response.json();
+
+                document.getElementById("temperature").innerText =
+                    data.temperature + " °C";
+
+                document.getElementById("humidity").innerText =
+                    data.humidity + " %";
+
+                document.getElementById("zone1").innerText =
+                    data.zone1 ? "HUMAN" : "EMPTY";
+
+                document.getElementById("zone2").innerText =
+                    data.zone2 ? "HUMAN" : "EMPTY";
+
+                document.getElementById("zone3").innerText =
+                    data.zone3 ? "HUMAN" : "EMPTY";
+
+                document.getElementById("fan").innerText =
+                    data.fan ? "ON" : "OFF";
+
+                document.getElementById("ac").innerText =
+                    data.ac ? "ON" : "OFF";
+
+            }
+
+            catch (error) {
+
+                console.log("Dashboard error:", error);
+
+            }
+
+        }
+
+        updateDashboard();
+
+        setInterval(updateDashboard, 2000);
+
+    </script>
+
+</body>
+
+</html>
