@@ -3,1139 +3,1444 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Smart Classroom Energy Monitor</title>
-
-<style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background:
-        linear-gradient(
-            135deg,
-            #eef2ff,
-            #f8fafc
-        );
-    color: #1e293b;
-    min-height: 100vh;
-}
-
-/* HEADER */
-
-header {
-    background:
-        linear-gradient(
-            135deg,
-            #1e3a8a,
-            #2563eb
-        );
-    color: white;
-    padding: 25px;
-    text-align: center;
-    box-shadow:
-        0 4px 15px
-        rgba(0,0,0,0.15);
-}
-
-header h1 {
-    margin-bottom: 8px;
-}
-
-header p {
-    opacity: 0.9;
-}
-
-/* CONTAINER */
-
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 25px;
-}
-
-/* STATUS */
-
-.status {
-    padding: 18px;
-    border-radius: 12px;
-    background: white;
-    margin-bottom: 25px;
-    box-shadow:
-        0 4px 12px
-        rgba(0,0,0,0.08);
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.connected {
-    color: #16a34a;
-}
-
-.disconnected {
-    color: #dc2626;
-}
-
-/* GRID */
-
-.grid {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(220px, 1fr)
-        );
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-/* CARD */
-
-.card {
-    background: white;
-    padding: 22px;
-    border-radius: 15px;
-    box-shadow:
-        0 4px 12px
-        rgba(0,0,0,0.08);
-    text-align: center;
-}
-
-.card h3 {
-    margin-bottom: 12px;
-    color: #475569;
-}
-
-.value {
-    font-size: 30px;
-    font-weight: bold;
-    color: #2563eb;
-}
-
-/* SECTION */
-
-.section {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow:
-        0 4px 12px
-        rgba(0,0,0,0.08);
-}
-
-.section h2 {
-    margin-bottom: 20px;
-    color: #1e3a8a;
-}
-
-/* ZONES */
-
-.zones {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(200px, 1fr)
-        );
-    gap: 20px;
-}
-
-.zone {
-    padding: 20px;
-    border-radius: 12px;
-    background: #f8fafc;
-    border: 2px solid #e2e8f0;
-    text-align: center;
-}
-
-.zone.active {
-    border-color: #22c55e;
-    background: #f0fdf4;
-}
-
-.zone.empty {
-    border-color: #cbd5e1;
-    background: #f8fafc;
-}
-
-/* DEVICES */
-
-.device-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(180px, 1fr)
-        );
-    gap: 20px;
-}
-
-.device {
-    padding: 20px;
-    background: #f8fafc;
-    border-radius: 12px;
-    text-align: center;
-    border: 1px solid #e2e8f0;
-}
-
-.device-status {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 10px;
-}
-
-.on {
-    color: #16a34a;
-}
-
-.off {
-    color: #64748b;
-}
-
-/* BUTTONS */
-
-button {
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #2563eb;
-    color: white;
-    font-size: 15px;
-    margin: 4px;
-}
-
-button:hover {
-    background: #1d4ed8;
-}
-
-.reset {
-    background: #dc2626;
-}
-
-.reset:hover {
-    background: #b91c1c;
-}
-
-/* MODE */
-
-.mode-box {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 18px;
-}
-
-.mode-badge {
-    display: inline-block;
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-weight: bold;
-    background: #dcfce7;
-    color: #166534;
-}
-
-.mode-badge.manual {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-/* ENERGY */
-
-.energy-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(200px, 1fr)
-        );
-    gap: 20px;
-}
-
-.energy-item {
-    padding: 18px;
-    background: #f8fafc;
-    border-radius: 10px;
-    text-align: center;
-}
-
-.energy-item h4 {
-    color: #64748b;
-    margin-bottom: 8px;
-}
-
-.energy-item strong {
-    font-size: 24px;
-    color: #2563eb;
-}
-
-/* SAVINGS */
-
-.savings-box {
-    margin-top: 25px;
-    padding: 22px;
-    background: #f0fdf4;
-    border: 2px solid #bbf7d0;
-    border-radius: 14px;
-}
-
-.savings-box h3 {
-    color: #166534;
-    margin-bottom: 18px;
-}
-
-.savings-grid {
-    display: grid;
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(200px, 1fr)
-        );
-    gap: 15px;
-}
-
-.saving-card {
-    background: white;
-    padding: 18px;
-    border-radius: 10px;
-    text-align: center;
-    border: 1px solid #dcfce7;
-}
-
-.saving-card h4 {
-    color: #64748b;
-    margin-bottom: 8px;
-}
-
-.saving-card strong {
-    font-size: 25px;
-    color: #16a34a;
-}
-
-/* CHART */
-
-.chart-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
-    color: #64748b;
-    font-size: 14px;
-}
-
-.chart-wrap {
-    position: relative;
-    width: 100%;
-    height: 320px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 12px;
-}
-
-#powerChart {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-/* FOOTER */
-
-.footer {
-    text-align: center;
-    color: #64748b;
-    padding: 20px;
-}
-
-/* MOBILE */
-
-@media(max-width:600px) {
-
-    .container {
-        padding: 15px;
-    }
-
-    header h1 {
-        font-size: 24px;
-    }
-
-    .value {
-        font-size: 25px;
-    }
-
-    .chart-wrap {
-        height: 250px;
-    }
-
-}
-
-</style>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Classroom Energy Monitor</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f8fafc
+                );
+
+            color: #1e293b;
+
+            min-height: 100vh;
+        }
+
+
+        /* ==============================
+           HEADER
+           ============================== */
+
+        header {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1e3a8a,
+                    #2563eb
+                );
+
+            color: white;
+
+            padding: 25px;
+
+            text-align: center;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            margin-bottom: 8px;
+        }
+
+        header p {
+            opacity: 0.9;
+        }
+
+
+        /* ==============================
+           MAIN CONTAINER
+           ============================== */
+
+        .container {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+            padding: 25px;
+        }
+
+
+        /* ==============================
+           STATUS
+           ============================== */
+
+        .status {
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background: white;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+
+            text-align: center;
+
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+        .connected {
+            color: #16a34a;
+        }
+
+        .disconnected {
+            color: #dc2626;
+        }
+
+
+        /* ==============================
+           GRID
+           ============================== */
+
+        .grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* ==============================
+           CARD
+           ============================== */
+
+        .card {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+
+            text-align: center;
+        }
+
+        .card h3 {
+
+            margin-bottom: 12px;
+
+            color: #475569;
+        }
+
+        .value {
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+
+        /* ==============================
+           SECTION
+           ============================== */
+
+        .section {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+
+            margin-bottom: 20px;
+
+            color: #1e3a8a;
+        }
+
+
+        /* ==============================
+           ZONES
+           ============================== */
+
+        .zones {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .zone {
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            background: #f8fafc;
+
+            border: 2px solid #e2e8f0;
+
+            text-align: center;
+        }
+
+        .zone.active {
+
+            border-color: #22c55e;
+
+            background: #f0fdf4;
+        }
+
+        .zone.empty {
+
+            border-color: #cbd5e1;
+
+            background: #f8fafc;
+        }
+
+
+        /* ==============================
+           DEVICES
+           ============================== */
+
+        .device-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(180px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .device {
+
+            padding: 20px;
+
+            background: #f8fafc;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            border: 1px solid #e2e8f0;
+        }
+
+        .device-status {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin: 10px;
+        }
+
+        .on {
+            color: #16a34a;
+        }
+
+        .off {
+            color: #64748b;
+        }
+
+
+        /* ==============================
+           BUTTONS
+           ============================== */
+
+        button {
+
+            border: none;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 15px;
+
+            margin: 4px;
+
+            transition: 0.2s;
+        }
+
+        button:hover {
+
+            background: #1d4ed8;
+
+            transform: translateY(-1px);
+        }
+
+
+        .reset {
+
+            background: #dc2626;
+        }
+
+        .reset:hover {
+
+            background: #b91c1c;
+        }
+
+
+        /* ==============================
+           CONTROL MODE
+           ============================== */
+
+        .mode-box {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 15px;
+
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            padding: 18px;
+        }
+
+        .mode-left {
+
+            flex: 1;
+
+            min-width: 250px;
+        }
+
+        .mode-badge {
+
+            display: inline-block;
+
+            padding: 8px 18px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            background: #dcfce7;
+
+            color: #166534;
+
+            font-size: 16px;
+        }
+
+        .mode-badge.manual {
+
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+        .mode-button {
+
+            min-width: 170px;
+
+            font-weight: bold;
+        }
+
+        .manual-note {
+
+            margin-top: 12px;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            background: #fff7ed;
+
+            color: #9a3412;
+
+            display: none;
+
+            font-size: 14px;
+        }
+
+        .manual-note.show {
+            display: block;
+        }
+
+
+        /* ==============================
+           ENERGY
+           ============================== */
+
+        .energy-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .energy-item {
+
+            padding: 18px;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+
+            text-align: center;
+        }
+
+        .energy-item h4 {
+
+            color: #64748b;
+
+            margin-bottom: 8px;
+        }
+
+        .energy-item strong {
+
+            font-size: 24px;
+
+            color: #2563eb;
+        }
+
+
+        /* ==============================
+           ENERGY SAVINGS REPORT
+           ============================== */
+
+        .report-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(210px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .report-item {
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+
+            text-align: center;
+        }
+
+        .report-item h4 {
+
+            color: #64748b;
+
+            margin-bottom: 10px;
+        }
+
+        .report-value {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+
+        /* ==============================
+           LIVE CHART
+           ============================== */
+
+        .chart-info {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+        .chart-wrap {
+
+            position: relative;
+
+            width: 100%;
+
+            height: 320px;
+
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 12px;
+
+            padding: 12px;
+        }
+
+        #powerChart {
+
+            width: 100%;
+
+            height: 100%;
+
+            display: block;
+        }
+
+
+        /* ==============================
+           FOOTER
+           ============================== */
+
+        .footer {
+
+            text-align: center;
+
+            color: #64748b;
+
+            padding: 20px;
+        }
+
+
+        /* ==============================
+           MOBILE
+           ============================== */
+
+        @media(max-width:600px) {
+
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .value {
+                font-size: 25px;
+            }
+
+            .chart-wrap {
+                height: 250px;
+            }
+
+            .mode-box {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .mode-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
 
 </head>
 
+
 <body>
+
+
+<!-- ==========================================
+     HEADER
+     ========================================== -->
 
 <header>
 
-<h1>
-    Smart Classroom Energy Monitor
-</h1>
+    <h1>
+        Smart Classroom Energy Monitor
+    </h1>
 
-<p>
-    IoT Based Energy Saving and Automation System
-</p>
+    <p>
+        IoT Based Energy Saving and Automation System
+    </p>
 
 </header>
 
 
 <div class="container">
 
-<!-- CONNECTION -->
 
-<div class="status">
+    <!-- ==========================================
+         CONNECTION STATUS
+         ========================================== -->
 
-System Status:
+    <div class="status">
 
-<span
-    id="connectionStatus"
-    class="disconnected">
+        System Status:
 
-    Checking...
+        <span
+            id="connectionStatus"
+            class="disconnected">
 
-</span>
+            Checking...
+
+        </span>
+
+    </div>
+
+
+    <!-- ==========================================
+         SENSOR DATA
+         ========================================== -->
+
+    <div class="grid">
+
+
+        <div class="card">
+
+            <h3>
+                🌡 Temperature
+            </h3>
+
+            <div
+                class="value"
+                id="temperature">
+
+                -- °C
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                💧 Humidity
+            </h3>
+
+            <div
+                class="value"
+                id="humidity">
+
+                -- %
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                ⚡ Current Power
+            </h3>
+
+            <div
+                class="value"
+                id="currentPower">
+
+                -- W
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                🏫 Classroom
+            </h3>
+
+            <div
+                class="value"
+                id="classroomStatus">
+
+                --
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ==========================================
+         CONTROL MODE
+         ========================================== -->
+
+    <div class="section">
+
+        <h2>
+            ⚙ Control Mode
+        </h2>
+
+        <div class="mode-box">
+
+            <div class="mode-left">
+
+                <strong>
+                    Current System Mode
+                </strong>
+
+                <p
+                    style="
+                    margin-top:6px;
+                    color:#64748b;
+                    ">
+
+                    AUTO uses sensor-based automation.
+                    MANUAL uses dashboard controls.
+
+                </p>
+
+                <div
+                    id="manualNote"
+                    class="manual-note">
+
+                    🔧 MANUAL mode is active.
+                    Use the device controls below to
+                    operate the classroom devices.
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <span
+                    id="controlMode"
+                    class="mode-badge">
+
+                    AUTO
+
+                </span>
+
+                <br>
+
+                <button
+                    id="modeButton"
+                    class="mode-button"
+                    onclick="toggleControlMode()">
+
+                    Switch to MANUAL
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         CLASSROOM ZONES
+         ========================================== -->
+
+    <div class="section">
+
+        <h2>
+            Classroom Zones
+        </h2>
+
+        <div class="zones">
+
+
+            <div
+                class="zone"
+                id="zone1">
+
+                <h3>
+                    Zone 1
+                </h3>
+
+                <p id="zone1Status">
+                    Waiting...
+                </p>
+
+                <p>
+
+                    Light:
+
+                    <strong id="zone1Light">
+                        --
+                    </strong>
+
+                </p>
+
+            </div>
+
+
+            <div
+                class="zone"
+                id="zone2">
+
+                <h3>
+                    Zone 2
+                </h3>
+
+                <p id="zone2Status">
+                    Waiting...
+                </p>
+
+                <p>
+
+                    Light:
+
+                    <strong id="zone2Light">
+                        --
+                    </strong>
+
+                </p>
+
+            </div>
+
+
+            <div
+                class="zone"
+                id="zone3">
+
+                <h3>
+                    Zone 3
+                </h3>
+
+                <p id="zone3Status">
+                    Waiting...
+                </p>
+
+                <p>
+
+                    Light:
+
+                    <strong id="zone3Light">
+                        --
+                    </strong>
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         DEVICE STATUS
+         ========================================== -->
+
+    <div class="section">
+
+        <h2>
+            Device Status
+        </h2>
+
+        <div class="device-grid">
+
+
+            <div class="device">
+
+                <h3>
+                    💡 Light 1
+                </h3>
+
+                <div
+                    id="light1Status"
+                    class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    💡 Light 2
+                </h3>
+
+                <div
+                    id="light2Status"
+                    class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    💡 Light 3
+                </h3>
+
+                <div
+                    id="light3Status"
+                    class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    🌀 Fan
+                </h3>
+
+                <div
+                    id="fanStatus"
+                    class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    ❄ AC
+                </h3>
+
+                <div
+                    id="acStatus"
+                    class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         MANUAL CONTROL
+         ========================================== -->
+
+    <div class="section">
+
+        <h2>
+            Manual Control
+        </h2>
+
+        <p
+            style="
+            margin-bottom:15px;
+            color:#64748b;
+            ">
+
+            Switch the system to MANUAL mode
+            before using these controls.
+
+        </p>
+
+
+        <div class="device-grid">
+
+
+            <div class="device">
+
+                <h3>
+                    💡 Light 1
+                </h3>
+
+                <button
+                    onclick="manualControl('light1')">
+
+                    Toggle
+
+                </button>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    💡 Light 2
+                </h3>
+
+                <button
+                    onclick="manualControl('light2')">
+
+                    Toggle
+
+                </button>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    💡 Light 3
+                </h3>
+
+                <button
+                    onclick="manualControl('light3')">
+
+                    Toggle
+
+                </button>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    🌀 Fan
+                </h3>
+
+                <button
+                    onclick="manualControl('fan')">
+
+                    Toggle
+
+                </button>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>
+                    ❄ AC
+                </h3>
+
+                <button
+                    onclick="manualControl('ac')">
+
+                    Toggle
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+        <br>
+
+
+        <button
+            class="reset"
+            onclick="resetControls()">
+
+            Reset All Controls
+
+        </button>
+
+    </div>
+
+
+    <!-- ==========================================
+         ENERGY MONITORING
+         ========================================== -->
+
+    <div class="section">
+
+        <h2>
+            ⚡ Energy Monitoring
+        </h2>
+
+        <div class="energy-grid">
+
+
+            <div class="energy-item">
+
+                <h4>
+                    Average Power
+                </h4>
+
+                <strong id="averagePower">
+
+                    -- W
+
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>
+                    Energy Consumed
+                </h4>
+
+                <strong id="energyConsumed">
+
+                    -- kWh
+
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>
+                    Energy Saved
+                </h4>
+
+                <strong id="energySaved">
+
+                    -- kWh
+
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>
+                    Saving
+                </h4>
+
+                <strong id="savingPercentage">
+
+                    -- %
+
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>
+                    Estimated Cost
+                </h4>
+
+                <strong id="estimatedCost">
+
+                    ₹ --
+
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>
+                    Records
+                </h4>
+
+                <strong id="totalRecords">
+
+                    0
+
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         ENERGY SAVINGS REPORT
+         ========================================== -->
+
+    <div class="section">
+
+        <h2>
+            📊 Energy Savings Report
+        </h2>
+
+        <div class="report-grid">
+
+
+            <div class="report-item">
+
+                <h4>
+                    Without Smart Automation
+                </h4>
+
+                <div
+                    class="report-value"
+                    id="baselinePower">
+
+                    -- W
+
+                </div>
+
+            </div>
+
+
+            <div class="report-item">
+
+                <h4>
+                    With Smart Automation
+                </h4>
+
+                <div
+                    class="report-value"
+                    id="smartPower">
+
+                    -- W
+
+                </div>
+
+            </div>
+
+
+            <div class="report-item">
+
+                <h4>
+                    Power Reduced Now
+                </h4>
+
+                <div
+                    class="report-value"
+                    id="powerSavedNow">
+
+                    -- W
+
+                </div>
+
+            </div>
+
+
+            <div class="report-item">
+
+                <h4>
+                    Energy Saved
+                </h4>
+
+                <div
+                    class="report-value"
+                    id="reportEnergySaved">
+
+                    -- kWh
+
+                </div>
+
+            </div>
+
+
+            <div class="report-item">
+
+                <h4>
+                    Estimated Cost
+                </h4>
+
+                <div
+                    class="report-value"
+                    id="reportCost">
+
+                    ₹ --
+
+                </div>
+
+            </div>
+
+
+            <div class="report-item">
+
+                <h4>
+                    Efficiency
+                </h4>
+
+                <div
+                    class="report-value"
+                    id="reportEfficiency">
+
+                    -- %
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         LIVE POWER CHART
+         ========================================== -->
+
+    <div class="section">
+
+        <h2>
+            📈 Live Power Consumption
+        </h2>
+
+
+        <div class="chart-info">
+
+            <span>
+                Updates automatically every 2 seconds
+            </span>
+
+            <span id="chartReading">
+
+                Current: -- W
+
+            </span>
+
+        </div>
+
+
+        <div class="chart-wrap">
+
+            <canvas
+                id="powerChart">
+
+            </canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         LAST UPDATE
+         ========================================== -->
+
+    <div class="status">
+
+        Last Update:
+
+        <span id="lastUpdate">
+
+            --
+
+        </span>
+
+    </div>
+
 
 </div>
 
 
-<!-- SENSOR DATA -->
-
-<div class="grid">
-
-<div class="card">
-
-<h3>🌡 Temperature</h3>
-
-<div
-    class="value"
-    id="temperature">
-
-    -- °C
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>💧 Humidity</h3>
-
-<div
-    class="value"
-    id="humidity">
-
-    -- %
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>⚡ Current Power</h3>
-
-<div
-    class="value"
-    id="currentPower">
-
-    -- W
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>🏫 Classroom</h3>
-
-<div
-    class="value"
-    id="classroomStatus">
-
-    --
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- CONTROL MODE -->
-
-<div class="section">
-
-<h2>
-    ⚙ Control Mode
-</h2>
-
-<div class="mode-box">
-
-<div>
-
-<strong>
-    Current System Mode
-</strong>
-
-<p
-    style="
-    margin-top:6px;
-    color:#64748b;
-    ">
-
-    AUTO uses sensor-based automation.<br>
-    MANUAL uses dashboard controls.
-
-</p>
-
-</div>
-
-<span
-    id="controlMode"
-    class="mode-badge">
-
-    AUTO
-
-</span>
-
-</div>
-
-</div>
-
-
-<!-- ZONES -->
-
-<div class="section">
-
-<h2>
-    Classroom Zones
-</h2>
-
-<div class="zones">
-
-
-<div
-    class="zone"
-    id="zone1">
-
-<h3>
-    Zone 1
-</h3>
-
-<p id="zone1Status">
-    Waiting...
-</p>
-
-<p>
-    Light:
-    <strong id="zone1Light">
-        --
-    </strong>
-</p>
-
-</div>
-
-
-<div
-    class="zone"
-    id="zone2">
-
-<h3>
-    Zone 2
-</h3>
-
-<p id="zone2Status">
-    Waiting...
-</p>
-
-<p>
-    Light:
-    <strong id="zone2Light">
-        --
-    </strong>
-</p>
-
-</div>
-
-
-<div
-    class="zone"
-    id="zone3">
-
-<h3>
-    Zone 3
-</h3>
-
-<p id="zone3Status">
-    Waiting...
-</p>
-
-<p>
-    Light:
-    <strong id="zone3Light">
-        --
-    </strong>
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-<!-- DEVICE STATUS -->
-
-<div class="section">
-
-<h2>
-    Device Status
-</h2>
-
-<div class="device-grid">
-
-
-<div class="device">
-
-<h3>💡 Light 1</h3>
-
-<div
-    id="light1Status"
-    class="device-status off">
-
-    OFF
-
-</div>
-
-</div>
-
-
-<div class="device">
-
-<h3>💡 Light 2</h3>
-
-<div
-    id="light2Status"
-    class="device-status off">
-
-    OFF
-
-</div>
-
-</div>
-
-
-<div class="device">
-
-<h3>💡 Light 3</h3>
-
-<div
-    id="light3Status"
-    class="device-status off">
-
-    OFF
-
-</div>
-
-</div>
-
-
-<div class="device">
-
-<h3>🌀 Fan</h3>
-
-<div
-    id="fanStatus"
-    class="device-status off">
-
-    OFF
-
-</div>
-
-</div>
-
-
-<div class="device">
-
-<h3>❄ AC</h3>
-
-<div
-    id="acStatus"
-    class="device-status off">
-
-    OFF
-
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-<!-- MANUAL CONTROL -->
-
-<div class="section">
-
-<h2>
-    Manual Control
-</h2>
-
-<p
-    style="
-    margin-bottom:15px;
-    color:#64748b;
-    ">
-
-    Use these buttons to remotely control classroom devices.
-
-</p>
-
-<div class="device-grid">
-
-
-<div class="device">
-
-<h3>💡 Light 1</h3>
-
-<button
-    onclick="manualControl('light1')">
-
-    Toggle
-
-</button>
-
-</div>
-
-
-<div class="device">
-
-<h3>💡 Light 2</h3>
-
-<button
-    onclick="manualControl('light2')">
-
-    Toggle
-
-</button>
-
-</div>
-
-
-<div class="device">
-
-<h3>💡 Light 3</h3>
-
-<button
-    onclick="manualControl('light3')">
-
-    Toggle
-
-</button>
-
-</div>
-
-
-<div class="device">
-
-<h3>🌀 Fan</h3>
-
-<button
-    onclick="manualControl('fan')">
-
-    Toggle
-
-</button>
-
-</div>
-
-
-<div class="device">
-
-<h3>❄ AC</h3>
-
-<button
-    onclick="manualControl('ac')">
-
-    Toggle
-
-</button>
-
-</div>
-
-
-</div>
-
-<br>
-
-<button
-    class="reset"
-    onclick="resetControls()">
-
-    Reset All Controls
-
-</button>
-
-</div>
-
-
-<!-- ENERGY MONITORING -->
-
-<div class="section">
-
-<h2>
-    ⚡ Energy Monitoring
-</h2>
-
-<div class="energy-grid">
-
-
-<div class="energy-item">
-
-<h4>
-    Average Power
-</h4>
-
-<strong id="averagePower">
-    -- W
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Current Power
-</h4>
-
-<strong id="energyCurrentPower">
-    -- W
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Maximum Power
-</h4>
-
-<strong id="maximumPower">
-    -- W
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Power Saved Now
-</h4>
-
-<strong id="powerSavedNow">
-    -- W
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Energy Consumed
-</h4>
-
-<strong id="energyConsumed">
-    -- kWh
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Energy Saved
-</h4>
-
-<strong id="energySaved">
-    -- kWh
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Saving Percentage
-</h4>
-
-<strong id="savingPercentage">
-    -- %
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Estimated Cost
-</h4>
-
-<strong id="estimatedCost">
-    ₹ --
-</strong>
-
-</div>
-
-
-<div class="energy-item">
-
-<h4>
-    Records
-</h4>
-
-<strong id="totalRecords">
-    0
-</strong>
-
-</div>
-
-
-</div>
-
-
-<!-- ENERGY SAVINGS REPORT -->
-
-<div class="savings-box">
-
-<h3>
-    🌱 Energy Savings Report
-</h3>
-
-<div class="savings-grid">
-
-
-<div class="saving-card">
-
-<h4>
-    Without Smart Automation
-</h4>
-
-<strong id="baselinePower">
-    -- W
-</strong>
-
-<p style="margin-top:6px;color:#64748b;">
-    Maximum possible load
-</p>
-
-</div>
-
-
-<div class="saving-card">
-
-<h4>
-    With Smart Automation
-</h4>
-
-<strong id="smartPower">
-    -- W
-</strong>
-
-<p style="margin-top:6px;color:#64748b;">
-    Current actual load
-</p>
-
-</div>
-
-
-<div class="saving-card">
-
-<h4>
-    Power Reduced
-</h4>
-
-<strong id="powerReduced">
-    -- W
-</strong>
-
-<p style="margin-top:6px;color:#64748b;">
-    Instantaneous saving
-</p>
-
-</div>
-
-
-<div class="saving-card">
-
-<h4>
-    Energy Saved
-</h4>
-
-<strong id="reportEnergySaved">
-    -- kWh
-</strong>
-
-<p style="margin-top:6px;color:#64748b;">
-    Calculated saving
-</p>
-
-</div>
-
-
-<div class="saving-card">
-
-<h4>
-    Estimated Cost
-</h4>
-
-<strong id="reportCost">
-    ₹ --
-</strong>
-
-<p style="margin-top:6px;color:#64748b;">
-    Electricity cost
-</p>
-
-</div>
-
-
-<div class="saving-card">
-
-<h4>
-    Efficiency
-</h4>
-
-<strong id="reportEfficiency">
-    -- %
-</strong>
-
-<p style="margin-top:6px;color:#64748b;">
-    Energy saving percentage
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- LIVE CHART -->
-
-<div class="section">
-
-<h2>
-    📊 Live Power Consumption
-</h2>
-
-<div class="chart-info">
-
-<span>
-    Updates automatically every 2 seconds
-</span>
-
-<span id="chartReading">
-    Current: -- W
-</span>
-
-</div>
-
-<div class="chart-wrap">
-
-<canvas
-    id="powerChart">
-</canvas>
-
-</div>
-
-</div>
-
-
-<!-- LAST UPDATE -->
-
-<div class="status">
-
-Last Update:
-
-<span id="lastUpdate">
-    --
-</span>
-
-</div>
-
-
-</div>
-
+<!-- ==========================================
+     FOOTER
+     ========================================== -->
 
 <div class="footer">
 
-Smart Classroom Energy Saving System
+    Smart Classroom Energy Saving System
 
 </div>
 
 
 <script>
 
-/* ==================================================
-   API
-   ================================================== */
+
+// ==================================================
+// API BASE
+// ==================================================
 
 const API_BASE = "";
 
 
-/* ==================================================
-   POWER HISTORY
-   ================================================== */
+// ==================================================
+// LIVE POWER HISTORY
+// ==================================================
 
 const powerHistory = [];
 
 const MAX_CHART_POINTS = 30;
 
 
-/* ==================================================
-   DEVICE STATUS
-   ================================================== */
+// ==================================================
+// UPDATE DEVICE STATUS
+// ==================================================
 
 function updateDeviceStatus(elementId, state) {
 
@@ -1159,14 +1464,15 @@ function updateDeviceStatus(elementId, state) {
 
         element.className =
             "device-status off";
+
     }
 
 }
 
 
-/* ==================================================
-   ZONE
-   ================================================== */
+// ==================================================
+// UPDATE ZONE
+// ==================================================
 
 function updateZone(
     zoneId,
@@ -1185,13 +1491,13 @@ function updateZone(
     const lightElement =
         document.getElementById(lightId);
 
-    if (!zone ||
+    if (
+        !zone ||
         !status ||
-        !lightElement) {
-
+        !lightElement
+    ) {
         return;
     }
-
 
     if (Number(human) === 1) {
 
@@ -1208,8 +1514,8 @@ function updateZone(
 
         status.textContent =
             "EMPTY";
-    }
 
+    }
 
     lightElement.textContent =
         Number(light) === 1
@@ -1219,9 +1525,9 @@ function updateZone(
 }
 
 
-/* ==================================================
-   ADD POWER READING
-   ================================================== */
+// ==================================================
+// ADD POWER READING
+// ==================================================
 
 function addPowerReading(power) {
 
@@ -1253,7 +1559,6 @@ function addPowerReading(power) {
 
     });
 
-
     if (
         powerHistory.length >
         MAX_CHART_POINTS
@@ -1263,15 +1568,14 @@ function addPowerReading(power) {
 
     }
 
-
     drawPowerChart();
 
 }
 
 
-/* ==================================================
-   DRAW CHART
-   ================================================== */
+// ==================================================
+// DRAW LIVE POWER CHART
+// ==================================================
 
 function drawPowerChart() {
 
@@ -1319,7 +1623,6 @@ function drawPowerChart() {
         0
     );
 
-
     const width =
         rect.width;
 
@@ -1327,8 +1630,11 @@ function drawPowerChart() {
         rect.height;
 
     const left = 60;
+
     const right = 20;
+
     const top = 25;
+
     const bottom = 45;
 
     const plotWidth =
@@ -1341,7 +1647,6 @@ function drawPowerChart() {
         top -
         bottom;
 
-
     ctx.clearRect(
         0,
         0,
@@ -1349,12 +1654,10 @@ function drawPowerChart() {
         height
     );
 
-
     const values =
         powerHistory.map(
             item => item.power
         );
-
 
     const maximumValue =
         Math.max(
@@ -1362,12 +1665,10 @@ function drawPowerChart() {
             ...values
         );
 
-
     const scaleMax =
         Math.ceil(
             maximumValue / 100
         ) * 100;
-
 
     ctx.fillStyle =
         "#f8fafc";
@@ -1379,9 +1680,6 @@ function drawPowerChart() {
         height
     );
 
-
-    /* Y AXIS */
-
     ctx.font =
         "12px Arial";
 
@@ -1390,7 +1688,6 @@ function drawPowerChart() {
 
     ctx.textBaseline =
         "middle";
-
 
     for (
         let i = 0;
@@ -1409,7 +1706,6 @@ function drawPowerChart() {
             (
                 plotHeight / 4
             ) * i;
-
 
         ctx.beginPath();
 
@@ -1430,13 +1726,15 @@ function drawPowerChart() {
 
         ctx.stroke();
 
-
         ctx.fillStyle =
             "#64748b";
 
         ctx.fillText(
-            Math.round(value) + " W",
+            Math.round(value)
+            + " W",
+
             left - 8,
+
             y
         );
 
@@ -1468,10 +1766,9 @@ function drawPowerChart() {
         );
 
         return;
+
     }
 
-
-    /* X AXIS */
 
     ctx.font =
         "11px Arial";
@@ -1485,13 +1782,11 @@ function drawPowerChart() {
     ctx.textBaseline =
         "top";
 
-
     const labelCount =
         Math.min(
             5,
             powerHistory.length
         );
-
 
     for (
         let i = 0;
@@ -1513,7 +1808,6 @@ function drawPowerChart() {
                 )
             );
 
-
         const x =
             powerHistory.length === 1
 
@@ -1522,13 +1816,12 @@ function drawPowerChart() {
 
             : left +
               (
-                index /
-                (
-                    powerHistory.length - 1
-                )
+                  index /
+                  (
+                      powerHistory.length - 1
+                  )
               ) *
               plotWidth;
-
 
         ctx.fillText(
             powerHistory[index].time,
@@ -1541,10 +1834,7 @@ function drawPowerChart() {
     }
 
 
-    /* LINE */
-
     ctx.beginPath();
-
 
     powerHistory.forEach(
         (item, index) => {
@@ -1557,13 +1847,12 @@ function drawPowerChart() {
 
                 : left +
                   (
-                    index /
-                    (
-                        powerHistory.length - 1
-                    )
+                      index /
+                      (
+                          powerHistory.length - 1
+                      )
                   ) *
                   plotWidth;
-
 
             const y =
                 top +
@@ -1573,7 +1862,6 @@ function drawPowerChart() {
                     scaleMax
                 ) *
                 plotHeight;
-
 
             if (index === 0) {
 
@@ -1594,7 +1882,6 @@ function drawPowerChart() {
         }
     );
 
-
     ctx.strokeStyle =
         "#2563eb";
 
@@ -1609,8 +1896,6 @@ function drawPowerChart() {
     ctx.stroke();
 
 
-    /* POINTS */
-
     powerHistory.forEach(
         (item, index) => {
 
@@ -1622,13 +1907,12 @@ function drawPowerChart() {
 
                 : left +
                   (
-                    index /
-                    (
-                        powerHistory.length - 1
-                    )
+                      index /
+                      (
+                          powerHistory.length - 1
+                      )
                   ) *
                   plotWidth;
-
 
             const y =
                 top +
@@ -1638,7 +1922,6 @@ function drawPowerChart() {
                     scaleMax
                 ) *
                 plotHeight;
-
 
             ctx.beginPath();
 
@@ -1659,13 +1942,10 @@ function drawPowerChart() {
     );
 
 
-    /* CURRENT VALUE */
-
     const latest =
         powerHistory[
             powerHistory.length - 1
         ];
-
 
     if (latest) {
 
@@ -1678,7 +1958,6 @@ function drawPowerChart() {
             : left +
               plotWidth;
 
-
         const y =
             top +
             plotHeight -
@@ -1687,7 +1966,6 @@ function drawPowerChart() {
                 scaleMax
             ) *
             plotHeight;
-
 
         ctx.font =
             "bold 12px Arial";
@@ -1702,7 +1980,8 @@ function drawPowerChart() {
             "bottom";
 
         ctx.fillText(
-            latest.power + " W",
+            latest.power +
+            " W",
             x,
             y - 8
         );
@@ -1712,9 +1991,9 @@ function drawPowerChart() {
 }
 
 
-/* ==================================================
-   CONTROL MODE
-   ================================================== */
+// ==================================================
+// UPDATE CONTROL MODE
+// ==================================================
 
 async function updateControlMode() {
 
@@ -1733,15 +2012,6 @@ async function updateControlMode() {
         const result =
             await response.json();
 
-        const modeElement =
-            document.getElementById(
-                "controlMode"
-            );
-
-        if (!modeElement) {
-            return;
-        }
-
         let mode =
             result.mode ||
             result.control_mode ||
@@ -1750,18 +2020,50 @@ async function updateControlMode() {
         mode =
             String(mode).toUpperCase();
 
+
+        const modeElement =
+            document.getElementById(
+                "controlMode"
+            );
+
+        const modeButton =
+            document.getElementById(
+                "modeButton"
+            );
+
+        const manualNote =
+            document.getElementById(
+                "manualNote"
+            );
+
+
         modeElement.textContent =
             mode;
+
 
         if (mode === "MANUAL") {
 
             modeElement.className =
                 "mode-badge manual";
 
+            modeButton.textContent =
+                "Switch to AUTO";
+
+            manualNote.classList.add(
+                "show"
+            );
+
         } else {
 
             modeElement.className =
                 "mode-badge";
+
+            modeButton.textContent =
+                "Switch to MANUAL";
+
+            manualNote.classList.remove(
+                "show"
+            );
 
         }
 
@@ -1777,15 +2079,138 @@ async function updateControlMode() {
 }
 
 
-/* ==================================================
-   UPDATE DASHBOARD
-   ================================================== */
+// ==================================================
+// TOGGLE AUTO / MANUAL
+// ==================================================
+
+async function toggleControlMode() {
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE +
+                "/api/mode"
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to get current mode"
+            );
+
+        }
+
+        const currentData =
+            await response.json();
+
+        let currentMode =
+            currentData.mode ||
+            currentData.control_mode ||
+            "AUTO";
+
+        currentMode =
+            String(
+                currentMode
+            ).toUpperCase();
+
+
+        const newMode =
+            currentMode === "AUTO"
+            ? "MANUAL"
+            : "AUTO";
+
+
+        const changeResponse =
+            await fetch(
+                API_BASE +
+                "/api/mode",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            mode: newMode
+
+                        })
+
+                }
+            );
+
+
+        if (!changeResponse.ok) {
+
+            throw new Error(
+                "Mode change failed"
+            );
+
+        }
+
+
+        const result =
+            await changeResponse.json();
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "Unable to change mode"
+            );
+
+        }
+
+
+        await updateControlMode();
+
+        await updateDashboard();
+
+
+        alert(
+            "System changed to " +
+            newMode +
+            " mode."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Mode change error:",
+            error
+        );
+
+        alert(
+            "Unable to change system mode. " +
+            "Please try again."
+        );
+
+    }
+
+}
+
+
+// ==================================================
+// UPDATE DASHBOARD
+// ==================================================
 
 async function updateDashboard() {
 
     try {
 
-        /* SENSOR DATA */
+
+        // ------------------------------------------
+        // GET SENSOR DATA
+        // ------------------------------------------
 
         const dataResponse =
             await fetch(
@@ -1801,12 +2226,13 @@ async function updateDashboard() {
 
         }
 
-
         const dataResult =
             await dataResponse.json();
 
 
-        /* ENERGY DATA */
+        // ------------------------------------------
+        // GET ENERGY DATA
+        // ------------------------------------------
 
         const energyResponse =
             await fetch(
@@ -1822,10 +2248,13 @@ async function updateDashboard() {
 
         }
 
-
         const energy =
             await energyResponse.json();
 
+
+        // ------------------------------------------
+        // SENSOR DATA
+        // ------------------------------------------
 
         if (
             dataResult.success &&
@@ -1836,8 +2265,6 @@ async function updateDashboard() {
                 dataResult.data;
 
 
-            /* TEMPERATURE */
-
             document.getElementById(
                 "temperature"
             ).textContent =
@@ -1846,8 +2273,6 @@ async function updateDashboard() {
                 ).toFixed(1)
                 + " °C";
 
-
-            /* HUMIDITY */
 
             document.getElementById(
                 "humidity"
@@ -1858,32 +2283,17 @@ async function updateDashboard() {
                 + " %";
 
 
-            /* CURRENT POWER */
-
-            const currentPower =
-                Number(
-                    energy.current_power || 0
-                );
-
-
             document.getElementById(
                 "currentPower"
             ).textContent =
-                currentPower +
-                " W";
+                Number(
+                    energy.current_power
+                )
+                + " W";
 
-
-            document.getElementById(
-                "energyCurrentPower"
-            ).textContent =
-                currentPower +
-                " W";
-
-
-            /* CHART */
 
             addPowerReading(
-                currentPower
+                energy.current_power
             );
 
 
@@ -1897,14 +2307,12 @@ async function updateDashboard() {
                 chartReading.textContent =
                     "Current: "
                     +
-                    currentPower
+                    energy.current_power
                     +
                     " W";
 
             }
 
-
-            /* CLASSROOM */
 
             const occupied =
                 Number(data.zone1) === 1 ||
@@ -1919,8 +2327,6 @@ async function updateDashboard() {
                 ? "OCCUPIED"
                 : "EMPTY";
 
-
-            /* ZONES */
 
             updateZone(
                 "zone1",
@@ -1949,27 +2355,29 @@ async function updateDashboard() {
             );
 
 
-            /* DEVICES */
-
             updateDeviceStatus(
                 "light1Status",
                 data.light1
             );
+
 
             updateDeviceStatus(
                 "light2Status",
                 data.light2
             );
 
+
             updateDeviceStatus(
                 "light3Status",
                 data.light3
             );
 
+
             updateDeviceStatus(
                 "fanStatus",
                 data.fan
             );
+
 
             updateDeviceStatus(
                 "acStatus",
@@ -1977,20 +2385,17 @@ async function updateDashboard() {
             );
 
 
-            /* CONNECTION */
-
             document.getElementById(
                 "connectionStatus"
             ).textContent =
                 "CONNECTED";
+
 
             document.getElementById(
                 "connectionStatus"
             ).className =
                 "connected";
 
-
-            /* LAST UPDATE */
 
             document.getElementById(
                 "lastUpdate"
@@ -2000,14 +2405,65 @@ async function updateDashboard() {
         }
 
 
-        /* ==================================================
-           ENERGY
-           ================================================== */
+        // ==========================================
+        // ENERGY DATA
+        // ==========================================
 
-        const averagePower =
+        document.getElementById(
+            "averagePower"
+        ).textContent =
             Number(
-                energy.average_power || 0
+                energy.average_power
+            )
+            + " W";
+
+
+        document.getElementById(
+            "energyConsumed"
+        ).textContent =
+            Number(
+                energy.energy_consumed_kwh
+            )
+            + " kWh";
+
+
+        document.getElementById(
+            "energySaved"
+        ).textContent =
+            Number(
+                energy.energy_saved_kwh
+            )
+            + " kWh";
+
+
+        document.getElementById(
+            "savingPercentage"
+        ).textContent =
+            Number(
+                energy.energy_saving_percentage
+            )
+            + " %";
+
+
+        document.getElementById(
+            "estimatedCost"
+        ).textContent =
+            "₹ "
+            +
+            Number(
+                energy.estimated_cost
             );
+
+
+        document.getElementById(
+            "totalRecords"
+        ).textContent =
+            energy.total_records;
+
+
+        // ==========================================
+        // ENERGY SAVINGS REPORT
+        // ==========================================
 
         const maximumPower =
             Number(
@@ -2021,87 +2477,13 @@ async function updateDashboard() {
                 energy.current_power || 0
             );
 
-        const energyConsumed =
-            Number(
-                energy.energy_consumed_kwh || 0
+        const powerSaved =
+            Math.max(
+                0,
+                maximumPower -
+                currentPower
             );
 
-        const energySaved =
-            Number(
-                energy.energy_saved_kwh || 0
-            );
-
-        const savingPercentage =
-            Number(
-                energy.energy_saving_percentage || 0
-            );
-
-        const estimatedCost =
-            Number(
-                energy.estimated_cost || 0
-            );
-
-
-        /* AVERAGE */
-
-        document.getElementById(
-            "averagePower"
-        ).textContent =
-            averagePower +
-            " W";
-
-
-        /* CONSUMED */
-
-        document.getElementById(
-            "energyConsumed"
-        ).textContent =
-            energyConsumed.toFixed(4)
-            +
-            " kWh";
-
-
-        /* SAVED */
-
-        document.getElementById(
-            "energySaved"
-        ).textContent =
-            energySaved.toFixed(4)
-            +
-            " kWh";
-
-
-        /* PERCENTAGE */
-
-        document.getElementById(
-            "savingPercentage"
-        ).textContent =
-            savingPercentage.toFixed(2)
-            +
-            " %";
-
-
-        /* COST */
-
-        document.getElementById(
-            "estimatedCost"
-        ).textContent =
-            "₹ "
-            +
-            estimatedCost.toFixed(2);
-
-
-        /* RECORDS */
-
-        document.getElementById(
-            "totalRecords"
-        ).textContent =
-            energy.total_records || 0;
-
-
-        /* ==================================================
-           ENERGY SAVINGS REPORT
-           ================================================== */
 
         document.getElementById(
             "baselinePower"
@@ -2117,34 +2499,19 @@ async function updateDashboard() {
             " W";
 
 
-        /* POWER SAVED NOW */
-
-        const powerSavedNow =
-            Math.max(
-                0,
-                maximumPower -
-                currentPower
-            );
-
-
         document.getElementById(
             "powerSavedNow"
         ).textContent =
-            powerSavedNow +
-            " W";
-
-
-        document.getElementById(
-            "powerReduced"
-        ).textContent =
-            powerSavedNow +
+            powerSaved +
             " W";
 
 
         document.getElementById(
             "reportEnergySaved"
         ).textContent =
-            energySaved.toFixed(4)
+            Number(
+                energy.energy_saved_kwh || 0
+            )
             +
             " kWh";
 
@@ -2154,17 +2521,23 @@ async function updateDashboard() {
         ).textContent =
             "₹ "
             +
-            estimatedCost.toFixed(2);
+            Number(
+                energy.estimated_cost || 0
+            );
 
 
         document.getElementById(
             "reportEfficiency"
         ).textContent =
-            savingPercentage.toFixed(2)
+            Number(
+                energy.energy_saving_percentage || 0
+            )
             +
             " %";
 
+
     } catch (error) {
+
 
         console.error(
             "Dashboard error:",
@@ -2188,19 +2561,57 @@ async function updateDashboard() {
 }
 
 
-/* ==================================================
-   MANUAL CONTROL
-   ================================================== */
+// ==================================================
+// MANUAL CONTROL
+// ==================================================
 
 async function manualControl(device) {
 
     try {
+
+
+        // ------------------------------------------
+        // CHECK MODE FIRST
+        // ------------------------------------------
+
+        const modeResponse =
+            await fetch(
+                API_BASE +
+                "/api/mode"
+            );
+
+        const modeData =
+            await modeResponse.json();
+
+        const mode =
+            String(
+                modeData.mode ||
+                modeData.control_mode ||
+                "AUTO"
+            ).toUpperCase();
+
+
+        if (mode !== "MANUAL") {
+
+            alert(
+                "Please switch the system to MANUAL mode first."
+            );
+
+            return;
+
+        }
+
+
+        // ------------------------------------------
+        // GET CURRENT CONTROL STATE
+        // ------------------------------------------
 
         const currentResponse =
             await fetch(
                 API_BASE +
                 "/api/control"
             );
+
 
         if (!currentResponse.ok) {
 
@@ -2216,8 +2627,7 @@ async function manualControl(device) {
 
 
         const controls =
-            currentData.controls ||
-            {};
+            currentData.controls || {};
 
 
         const currentState =
@@ -2226,11 +2636,19 @@ async function manualControl(device) {
             );
 
 
+        // ------------------------------------------
+        // TOGGLE
+        // ------------------------------------------
+
         const newState =
             currentState === 1
             ? 0
             : 1;
 
+
+        // ------------------------------------------
+        // SEND COMMAND
+        // ------------------------------------------
 
         const response =
             await fetch(
@@ -2241,8 +2659,10 @@ async function manualControl(device) {
                     method: "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
@@ -2301,6 +2721,7 @@ async function manualControl(device) {
 
     } catch (error) {
 
+
         console.error(
             "Manual control error:",
             error
@@ -2320,20 +2741,23 @@ async function manualControl(device) {
 }
 
 
-/* ==================================================
-   RESET CONTROLS
-   ================================================== */
+// ==================================================
+// RESET CONTROLS
+// ==================================================
 
 async function resetControls() {
 
     try {
+
 
         const response =
             await fetch(
                 API_BASE +
                 "/api/control/reset",
                 {
+
                     method: "POST"
+
                 }
             );
 
@@ -2344,15 +2768,19 @@ async function resetControls() {
 
         if (result.success) {
 
+
             alert(
                 "All manual controls reset."
             );
+
 
             await updateDashboard();
 
             await updateControlMode();
 
+
         } else {
+
 
             alert(
                 "Reset failed."
@@ -2363,10 +2791,12 @@ async function resetControls() {
 
     } catch (error) {
 
+
         console.error(
             "Reset error:",
             error
         );
+
 
         alert(
             "Unable to reset controls."
@@ -2377,9 +2807,9 @@ async function resetControls() {
 }
 
 
-/* ==================================================
-   RESIZE
-   ================================================== */
+// ==================================================
+// WINDOW RESIZE
+// ==================================================
 
 window.addEventListener(
     "resize",
@@ -2391,23 +2821,24 @@ window.addEventListener(
 );
 
 
-/* ==================================================
-   INITIAL LOAD
-   ================================================== */
+// ==================================================
+// INITIAL LOAD
+// ==================================================
 
 updateDashboard();
 
 updateControlMode();
 
 
-/* ==================================================
-   AUTO REFRESH
-   ================================================== */
+// ==================================================
+// AUTO REFRESH
+// ==================================================
 
 setInterval(
     updateDashboard,
     2000
 );
+
 
 setInterval(
     updateControlMode,
@@ -2415,14 +2846,18 @@ setInterval(
 );
 
 
-/* INITIAL CHART */
+// ==================================================
+// INITIAL CHART DRAW
+// ==================================================
 
 setTimeout(
     drawPowerChart,
     300
 );
 
+
 </script>
+
 
 </body>
 
