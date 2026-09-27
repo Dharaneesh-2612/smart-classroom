@@ -665,7 +665,71 @@ def energy_summary():
 
     })
 
+# ==========================================
+# MANUAL CONTROL
+# ==========================================
 
+manual_controls = {
+    "light1": 0,
+    "light2": 0,
+    "light3": 0,
+    "fan": 0,
+    "ac": 0
+}
+
+
+@app.route("/api/control", methods=["POST"])
+def manual_control():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "success": False,
+            "message": "No control data received"
+        }), 400
+
+    device = data.get("device")
+    state = data.get("state")
+
+    if device not in manual_controls:
+        return jsonify({
+            "success": False,
+            "message": "Invalid device"
+        }), 400
+
+    if state not in [0, 1]:
+        return jsonify({
+            "success": False,
+            "message": "Invalid state"
+        }), 400
+
+    manual_controls[device] = state
+
+    print()
+    print("======================================")
+    print("       MANUAL CONTROL")
+    print("======================================")
+    print("Device:", device)
+    print("State:", "ON" if state == 1 else "OFF")
+    print("======================================")
+
+    return jsonify({
+        "success": True,
+        "device": device,
+        "state": state,
+        "message": device + " turned " +
+                  ("ON" if state == 1 else "OFF")
+    })
+
+
+@app.route("/api/control", methods=["GET"])
+def get_manual_control():
+
+    return jsonify({
+        "success": True,
+        "controls": manual_controls
+    })
 # =====================================================
 # RUN APPLICATION
 # =====================================================
