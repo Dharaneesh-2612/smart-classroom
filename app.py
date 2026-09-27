@@ -5,15 +5,17 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-# ==========================================
+
+# =========================================================
 # SENSOR DATA STORAGE
-# ==========================================
+# =========================================================
 
 records = []
 
-# ==========================================
+
+# =========================================================
 # POWER CONFIGURATION
-# ==========================================
+# =========================================================
 
 LIGHT_POWER = 40
 FAN_POWER = 75
@@ -30,9 +32,22 @@ MAX_POWER = (
 ELECTRICITY_TARIFF = 8.0
 
 
-# ==========================================
-# MANUAL CONTROL
-# ==========================================
+# =========================================================
+# CONTROL MODE
+# =========================================================
+
+# AUTO:
+# ESP32 uses PIR + temperature automation
+#
+# MANUAL:
+# ESP32 uses dashboard device commands
+
+control_mode = "AUTO"
+
+
+# =========================================================
+# MANUAL DEVICE STATES
+# =========================================================
 
 manual_controls = {
     "light1": 0,
@@ -43,18 +58,19 @@ manual_controls = {
 }
 
 
-# ==========================================
+# =========================================================
 # HOME PAGE
-# ==========================================
+# =========================================================
 
 @app.route("/")
 def home():
+
     return render_template("index.html")
 
 
-# ==========================================
+# =========================================================
 # RECEIVE ESP32 DATA
-# ==========================================
+# =========================================================
 
 @app.route("/api/data", methods=["POST"])
 def receive_data():
@@ -62,6 +78,7 @@ def receive_data():
     data = request.get_json()
 
     if not data:
+
         return jsonify({
             "success": False,
             "message": "No data received"
@@ -70,93 +87,154 @@ def receive_data():
     try:
 
         record = {
-            "timestamp": datetime.now().strftime(
-                "%Y-%m-%d %H:%M:%S"
-            ),
 
-            "zone1": int(data.get("zone1", 0)),
-            "zone2": int(data.get("zone2", 0)),
-            "zone3": int(data.get("zone3", 0)),
+            "timestamp":
+                datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                ),
 
-            "temperature": float(
-                data.get("temperature", 0)
-            ),
+            "zone1":
+                int(data.get("zone1", 0)),
 
-            "humidity": float(
-                data.get("humidity", 0)
-            ),
+            "zone2":
+                int(data.get("zone2", 0)),
 
-            "light1": int(data.get("light1", 0)),
-            "light2": int(data.get("light2", 0)),
-            "light3": int(data.get("light3", 0)),
+            "zone3":
+                int(data.get("zone3", 0)),
 
-            "fan": int(data.get("fan", 0)),
-            "ac": int(data.get("ac", 0))
+            "temperature":
+                float(data.get("temperature", 0)),
+
+            "humidity":
+                float(data.get("humidity", 0)),
+
+            "light1":
+                int(data.get("light1", 0)),
+
+            "light2":
+                int(data.get("light2", 0)),
+
+            "light3":
+                int(data.get("light3", 0)),
+
+            "fan":
+                int(data.get("fan", 0)),
+
+            "ac":
+                int(data.get("ac", 0))
         }
 
         records.append(record)
 
         # Keep latest 500 records
         if len(records) > 500:
+
             records.pop(0)
 
         print()
         print("======================================")
-        print("ESP32 DATA RECEIVED")
+        print("          ESP32 DATA RECEIVED")
         print("======================================")
-        print(record)
+
+        print("Zone 1:",
+              record["zone1"])
+
+        print("Zone 2:",
+              record["zone2"])
+
+        print("Zone 3:",
+              record["zone3"])
+
+        print("Temperature:",
+              record["temperature"])
+
+        print("Humidity:",
+              record["humidity"])
+
+        print("Light 1:",
+              record["light1"])
+
+        print("Light 2:",
+              record["light2"])
+
+        print("Light 3:",
+              record["light3"])
+
+        print("Fan:",
+              record["fan"])
+
+        print("AC:",
+              record["ac"])
+
+        print("======================================")
 
         return jsonify({
+
             "success": True,
-            "message": "Data received successfully",
+
+            "message":
+                "Data received successfully",
+
             "data": record
         })
 
     except Exception as e:
 
-        print("Data error:", e)
+        print(
+            "Data processing error:",
+            e
+        )
 
         return jsonify({
+
             "success": False,
+
             "message": str(e)
         }), 400
 
 
-# ==========================================
-# GET LATEST DATA
-# ==========================================
+# =========================================================
+# GET LATEST ESP32 DATA
+# =========================================================
 
 @app.route("/api/data", methods=["GET"])
 def get_data():
 
     if not records:
+
         return jsonify({
+
             "success": True,
+
             "data": None
         })
 
     return jsonify({
+
         "success": True,
+
         "data": records[-1]
     })
 
 
-# ==========================================
-# GET HISTORY
-# ==========================================
+# =========================================================
+# GET SENSOR HISTORY
+# =========================================================
 
 @app.route("/api/history", methods=["GET"])
 def get_history():
 
     return jsonify({
+
         "success": True,
+
         "records": records
     })
 
 
-# ==========================================
+# =========================================================
 # ENERGY CALCULATION
-# ==========================================
+# =========================================================
 
 @app.route("/api/energy", methods=["GET"])
 def get_energy():
@@ -164,119 +242,227 @@ def get_energy():
     if not records:
 
         return jsonify({
+
             "average_power": 0,
+
             "current_power": 0,
+
             "energy_consumed_kwh": 0,
+
             "energy_saved_kwh": 0,
+
             "energy_saving_percentage": 0,
+
             "estimated_cost": 0,
-            "maximum_possible_power": MAX_POWER,
+
+            "maximum_possible_power":
+                MAX_POWER,
+
             "maximum_power": 0,
+
             "minimum_power": 0,
-            "electricity_tariff": ELECTRICITY_TARIFF,
+
+            "electricity_tariff":
+                ELECTRICITY_TARIFF,
+
             "total_records": 0
         })
 
+
     power_values = []
+
 
     for record in records:
 
         power = 0
 
-        power += record["light1"] * LIGHT_POWER
-        power += record["light2"] * LIGHT_POWER
-        power += record["light3"] * LIGHT_POWER
+        # Lights
 
-        power += record["fan"] * FAN_POWER
-        power += record["ac"] * AC_POWER
+        power += (
+            record["light1"]
+            * LIGHT_POWER
+        )
+
+        power += (
+            record["light2"]
+            * LIGHT_POWER
+        )
+
+        power += (
+            record["light3"]
+            * LIGHT_POWER
+        )
+
+        # Fan
+
+        power += (
+            record["fan"]
+            * FAN_POWER
+        )
+
+        # AC
+
+        power += (
+            record["ac"]
+            * AC_POWER
+        )
 
         power_values.append(power)
 
-    current_power = power_values[-1]
+
+    # Current power
+
+    current_power = (
+        power_values[-1]
+    )
+
+
+    # Average power
 
     average_power = (
-        sum(power_values) / len(power_values)
+        sum(power_values)
+        /
+        len(power_values)
     )
 
-    maximum_power = max(power_values)
-    minimum_power = min(power_values)
 
-    # Each ESP32 reading is approximately 5 seconds apart
-    interval_hours = 5 / 3600
+    # Maximum / minimum
+
+    maximum_power = max(
+        power_values
+    )
+
+    minimum_power = min(
+        power_values
+    )
+
+
+    # ESP32 sends approximately
+    # every 5 seconds
+
+    interval_hours = (
+        5 / 3600
+    )
+
+
+    # Energy consumed
 
     energy_consumed_kwh = (
+
         sum(power_values)
-        * interval_hours
-        / 1000
+        *
+        interval_hours
+        /
+        1000
     )
 
+
+    # Energy saved
+
     energy_saved_kwh = (
+
         max(
             0,
-            MAX_POWER * len(power_values)
-            - sum(power_values)
+
+            (
+                MAX_POWER
+                *
+                len(power_values)
+            )
+            -
+            sum(power_values)
         )
-        * interval_hours
-        / 1000
+        *
+        interval_hours
+        /
+        1000
     )
+
+
+    # Saving percentage
 
     saving_percentage = 0
 
+
     if MAX_POWER > 0:
 
-        saving_percentage = (
-            energy_saved_kwh
+        maximum_energy = (
+
+            MAX_POWER
+            *
+            len(power_values)
+            *
+            interval_hours
             /
-            (
-                MAX_POWER
-                * len(power_values)
-                * interval_hours
-                / 1000
-            )
-        ) * 100
+            1000
+        )
+
+        if maximum_energy > 0:
+
+            saving_percentage = (
+
+                energy_saved_kwh
+                /
+                maximum_energy
+            ) * 100
+
+
+    # Estimated cost
 
     estimated_cost = (
+
         energy_consumed_kwh
-        * ELECTRICITY_TARIFF
+        *
+        ELECTRICITY_TARIFF
     )
+
 
     return jsonify({
 
-        "average_power": round(
-            average_power,
-            2
-        ),
+        "average_power":
+            round(
+                average_power,
+                2
+            ),
 
-        "current_power": round(
-            current_power,
-            2
-        ),
+        "current_power":
+            round(
+                current_power,
+                2
+            ),
 
-        "energy_consumed_kwh": round(
-            energy_consumed_kwh,
-            4
-        ),
+        "energy_consumed_kwh":
+            round(
+                energy_consumed_kwh,
+                4
+            ),
 
-        "energy_saved_kwh": round(
-            energy_saved_kwh,
-            4
-        ),
+        "energy_saved_kwh":
+            round(
+                energy_saved_kwh,
+                4
+            ),
 
-        "energy_saving_percentage": round(
-            saving_percentage,
-            2
-        ),
+        "energy_saving_percentage":
+            round(
+                saving_percentage,
+                2
+            ),
 
-        "estimated_cost": round(
-            estimated_cost,
-            2
-        ),
+        "estimated_cost":
+            round(
+                estimated_cost,
+                2
+            ),
 
-        "maximum_possible_power": MAX_POWER,
+        "maximum_possible_power":
+            MAX_POWER,
 
-        "maximum_power": maximum_power,
+        "maximum_power":
+            maximum_power,
 
-        "minimum_power": minimum_power,
+        "minimum_power":
+            minimum_power,
 
         "electricity_tariff":
             ELECTRICITY_TARIFF,
@@ -286,69 +472,196 @@ def get_energy():
     })
 
 
-# ==========================================
-# MANUAL CONTROL - POST
-# ==========================================
+# =========================================================
+# GET CONTROL MODE
+# =========================================================
 
-@app.route("/api/control", methods=["POST"])
-def manual_control():
+@app.route("/api/mode", methods=["GET"])
+def get_mode():
+
+    return jsonify({
+
+        "success": True,
+
+        "mode": control_mode
+    })
+
+
+# =========================================================
+# CHANGE CONTROL MODE
+# =========================================================
+
+@app.route("/api/mode", methods=["POST"])
+def change_mode():
+
+    global control_mode
 
     data = request.get_json()
 
     if not data:
 
         return jsonify({
+
             "success": False,
-            "message": "No control data received"
+
+            "message":
+                "No mode received"
         }), 400
 
-    device = data.get("device")
-    state = data.get("state")
 
-    # Check device
+    mode = data.get("mode")
+
+
+    if mode not in [
+        "AUTO",
+        "MANUAL"
+    ]:
+
+        return jsonify({
+
+            "success": False,
+
+            "message":
+                "Invalid mode. Use AUTO or MANUAL."
+        }), 400
+
+
+    control_mode = mode
+
+
+    print()
+    print("======================================")
+    print("        CONTROL MODE CHANGED")
+    print("======================================")
+
+    print(
+        "Control Mode:",
+        control_mode
+    )
+
+    print("======================================")
+
+
+    return jsonify({
+
+        "success": True,
+
+        "mode":
+            control_mode,
+
+        "message":
+            "Control mode changed to "
+            + control_mode
+    })
+
+
+# =========================================================
+# MANUAL CONTROL - POST
+# =========================================================
+
+@app.route("/api/control", methods=["POST"])
+def manual_control():
+
+    data = request.get_json()
+
+
+    if not data:
+
+        return jsonify({
+
+            "success": False,
+
+            "message":
+                "No control data received"
+        }), 400
+
+
+    device = data.get(
+        "device"
+    )
+
+    state = data.get(
+        "state"
+    )
+
+
+    # Validate device
+
     if device not in manual_controls:
 
         return jsonify({
+
             "success": False,
-            "message": "Invalid device"
+
+            "message":
+                "Invalid device"
         }), 400
 
-    # Check state
+
+    # Validate state
+
     if state not in [0, 1]:
 
         return jsonify({
+
             "success": False,
-            "message": "Invalid state"
+
+            "message":
+                "Invalid state"
         }), 400
 
-    manual_controls[device] = state
+
+    # Save state
+
+    manual_controls[
+        device
+    ] = state
+
 
     print()
     print("======================================")
     print("          MANUAL CONTROL")
     print("======================================")
 
-    print("Device:", device)
+    print(
+        "Device:",
+        device
+    )
 
     print(
         "State:",
-        "ON" if state == 1 else "OFF"
+        "ON"
+        if state == 1
+        else "OFF"
+    )
+
+    print(
+        "Current Mode:",
+        control_mode
     )
 
     print("======================================")
+
 
     return jsonify({
 
         "success": True,
 
-        "device": device,
+        "device":
+            device,
 
-        "state": state,
+        "state":
+            state,
+
+        "mode":
+            control_mode,
 
         "message":
+
             device
             + " turned "
-            + (
+            +
+            (
                 "ON"
                 if state == 1
                 else "OFF"
@@ -356,9 +669,9 @@ def manual_control():
     })
 
 
-# ==========================================
-# MANUAL CONTROL - GET
-# ==========================================
+# =========================================================
+# GET MANUAL CONTROL STATES
+# =========================================================
 
 @app.route("/api/control", methods=["GET"])
 def get_manual_control():
@@ -367,20 +680,27 @@ def get_manual_control():
 
         "success": True,
 
-        "controls": manual_controls
+        "mode":
+            control_mode,
+
+        "controls":
+            manual_controls
     })
 
 
-# ==========================================
+# =========================================================
 # RESET MANUAL CONTROLS
-# ==========================================
+# =========================================================
 
 @app.route("/api/control/reset", methods=["POST"])
 def reset_manual_control():
 
     for device in manual_controls:
 
-        manual_controls[device] = 0
+        manual_controls[
+            device
+        ] = 0
+
 
     return jsonify({
 
@@ -394,14 +714,47 @@ def reset_manual_control():
     })
 
 
-# ==========================================
+# =========================================================
+# HEALTH CHECK
+# =========================================================
+
+@app.route("/api/health", methods=["GET"])
+def health():
+
+    return jsonify({
+
+        "success": True,
+
+        "server":
+            "Smart Classroom API",
+
+        "status":
+            "running",
+
+        "mode":
+            control_mode,
+
+        "records":
+            len(records),
+
+        "time":
+            datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+    })
+
+
+# =========================================================
 # SERVER
-# ==========================================
+# =========================================================
 
 if __name__ == "__main__":
 
     app.run(
+
         host="0.0.0.0",
+
         port=5000,
+
         debug=True
     )
