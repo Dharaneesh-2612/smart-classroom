@@ -19,7 +19,6 @@
         }
 
         body {
-
             font-family: Arial, sans-serif;
 
             background:
@@ -30,7 +29,6 @@
                 );
 
             color: #1e293b;
-
             min-height: 100vh;
         }
 
@@ -40,7 +38,6 @@
            ============================== */
 
         header {
-
             background:
                 linear-gradient(
                     135deg,
@@ -49,9 +46,7 @@
                 );
 
             color: white;
-
             padding: 25px;
-
             text-align: center;
 
             box-shadow:
@@ -69,15 +64,12 @@
 
 
         /* ==============================
-           MAIN CONTAINER
+           MAIN
            ============================== */
 
         .container {
-
             max-width: 1200px;
-
             margin: auto;
-
             padding: 25px;
         }
 
@@ -87,13 +79,9 @@
            ============================== */
 
         .status {
-
             padding: 18px;
-
             border-radius: 12px;
-
             background: white;
-
             margin-bottom: 25px;
 
             box-shadow:
@@ -101,9 +89,7 @@
                 rgba(0,0,0,0.08);
 
             text-align: center;
-
             font-size: 20px;
-
             font-weight: bold;
         }
 
@@ -121,7 +107,6 @@
            ============================== */
 
         .grid {
-
             display: grid;
 
             grid-template-columns:
@@ -131,7 +116,6 @@
                 );
 
             gap: 20px;
-
             margin-bottom: 25px;
         }
 
@@ -141,11 +125,8 @@
            ============================== */
 
         .card {
-
             background: white;
-
             padding: 22px;
-
             border-radius: 15px;
 
             box-shadow:
@@ -156,18 +137,13 @@
         }
 
         .card h3 {
-
             margin-bottom: 12px;
-
             color: #475569;
         }
 
         .value {
-
             font-size: 30px;
-
             font-weight: bold;
-
             color: #2563eb;
         }
 
@@ -177,13 +153,9 @@
            ============================== */
 
         .section {
-
             background: white;
-
             padding: 25px;
-
             border-radius: 15px;
-
             margin-bottom: 25px;
 
             box-shadow:
@@ -192,9 +164,7 @@
         }
 
         .section h2 {
-
             margin-bottom: 20px;
-
             color: #1e3a8a;
         }
 
@@ -204,7 +174,6 @@
            ============================== */
 
         .zones {
-
             display: grid;
 
             grid-template-columns:
@@ -217,9 +186,7 @@
         }
 
         .zone {
-
             padding: 20px;
-
             border-radius: 12px;
 
             background: #f8fafc;
@@ -227,19 +194,18 @@
             border: 2px solid #e2e8f0;
 
             text-align: center;
+
+            transition:
+                0.2s ease;
         }
 
         .zone.active {
-
             border-color: #22c55e;
-
             background: #f0fdf4;
         }
 
         .zone.empty {
-
             border-color: #cbd5e1;
-
             background: #f8fafc;
         }
 
@@ -249,7 +215,6 @@
            ============================== */
 
         .device-grid {
-
             display: grid;
 
             grid-template-columns:
@@ -262,9 +227,7 @@
         }
 
         .device {
-
             padding: 20px;
-
             background: #f8fafc;
 
             border-radius: 12px;
@@ -275,11 +238,8 @@
         }
 
         .device-status {
-
             font-size: 18px;
-
             font-weight: bold;
-
             margin: 10px;
         }
 
@@ -297,7 +257,6 @@
            ============================== */
 
         button {
-
             border: none;
 
             padding: 10px 18px;
@@ -314,30 +273,32 @@
 
             margin: 4px;
 
-            transition: 0.2s;
+            transition:
+                0.2s ease;
         }
 
         button:hover {
-
             background: #1d4ed8;
-
             transform: translateY(-1px);
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         .reset {
-
             background: #dc2626;
         }
 
         .reset:hover {
-
             background: #b91c1c;
         }
 
 
         /* ==============================
-           CONTROL MODE
+           MODE
            ============================== */
 
         .mode-box {
@@ -362,10 +323,8 @@
         }
 
         .mode-left {
-
             flex: 1;
-
-            min-width: 250px;
+            min-width: 220px;
         }
 
         .mode-badge {
@@ -381,8 +340,6 @@
             background: #dcfce7;
 
             color: #166534;
-
-            font-size: 16px;
         }
 
         .mode-badge.manual {
@@ -394,30 +351,7 @@
 
         .mode-button {
 
-            min-width: 170px;
-
-            font-weight: bold;
-        }
-
-        .manual-note {
-
-            margin-top: 12px;
-
-            padding: 12px;
-
-            border-radius: 8px;
-
-            background: #fff7ed;
-
-            color: #9a3412;
-
-            display: none;
-
-            font-size: 14px;
-        }
-
-        .manual-note.show {
-            display: block;
+            min-width: 160px;
         }
 
 
@@ -465,7 +399,7 @@
 
 
         /* ==============================
-           ENERGY SAVINGS REPORT
+           ENERGY REPORT
            ============================== */
 
         .report-grid {
@@ -475,10 +409,12 @@
             grid-template-columns:
                 repeat(
                     auto-fit,
-                    minmax(210px, 1fr)
+                    minmax(220px, 1fr)
                 );
 
             gap: 20px;
+
+            margin-top: 20px;
         }
 
         .report-item {
@@ -501,18 +437,18 @@
             margin-bottom: 10px;
         }
 
-        .report-value {
+        .report-item strong {
+
+            display: block;
 
             font-size: 25px;
-
-            font-weight: bold;
 
             color: #2563eb;
         }
 
 
         /* ==============================
-           LIVE CHART
+           CHART
            ============================== */
 
         .chart-info {
@@ -595,16 +531,6 @@
 
             .chart-wrap {
                 height: 250px;
-            }
-
-            .mode-box {
-                flex-direction: column;
-
-                align-items: stretch;
-            }
-
-            .mode-button {
-                width: 100%;
             }
 
         }
@@ -758,20 +684,25 @@
                     color:#64748b;
                     ">
 
-                    AUTO uses sensor-based automation.
-                    MANUAL uses dashboard controls.
+                    AUTO uses sensor-based
+                    automation.
+
+                    MANUAL uses dashboard
+                    controls.
 
                 </p>
 
-                <div
-                    id="manualNote"
-                    class="manual-note">
+                <p
+                    id="modeMessage"
+                    style="
+                    margin-top:8px;
+                    font-weight:bold;
+                    color:#2563eb;
+                    ">
 
-                    🔧 MANUAL mode is active.
-                    Use the device controls below to
-                    operate the classroom devices.
+                    Checking mode...
 
-                </div>
+                </p>
 
             </div>
 
@@ -1142,9 +1073,7 @@
                 </h4>
 
                 <strong id="averagePower">
-
                     -- W
-
                 </strong>
 
             </div>
@@ -1157,9 +1086,7 @@
                 </h4>
 
                 <strong id="energyConsumed">
-
                     -- kWh
-
                 </strong>
 
             </div>
@@ -1172,9 +1099,7 @@
                 </h4>
 
                 <strong id="energySaved">
-
                     -- kWh
-
                 </strong>
 
             </div>
@@ -1187,9 +1112,7 @@
                 </h4>
 
                 <strong id="savingPercentage">
-
                     -- %
-
                 </strong>
 
             </div>
@@ -1202,9 +1125,7 @@
                 </h4>
 
                 <strong id="estimatedCost">
-
                     ₹ --
-
                 </strong>
 
             </div>
@@ -1217,9 +1138,7 @@
                 </h4>
 
                 <strong id="totalRecords">
-
                     0
-
                 </strong>
 
             </div>
@@ -1240,6 +1159,19 @@
             📊 Energy Savings Report
         </h2>
 
+        <p
+            style="
+            color:#64748b;
+            margin-bottom:10px;
+            ">
+
+            Comparison between maximum possible
+            classroom power and current smart
+            automation power.
+
+        </p>
+
+
         <div class="report-grid">
 
 
@@ -1249,13 +1181,9 @@
                     Without Smart Automation
                 </h4>
 
-                <div
-                    class="report-value"
-                    id="baselinePower">
-
+                <strong id="baselinePower">
                     -- W
-
-                </div>
+                </strong>
 
             </div>
 
@@ -1266,13 +1194,9 @@
                     With Smart Automation
                 </h4>
 
-                <div
-                    class="report-value"
-                    id="smartPower">
-
+                <strong id="smartPower">
                     -- W
-
-                </div>
+                </strong>
 
             </div>
 
@@ -1283,13 +1207,9 @@
                     Power Reduced Now
                 </h4>
 
-                <div
-                    class="report-value"
-                    id="powerSavedNow">
-
+                <strong id="powerSavedNow">
                     -- W
-
-                </div>
+                </strong>
 
             </div>
 
@@ -1300,13 +1220,9 @@
                     Energy Saved
                 </h4>
 
-                <div
-                    class="report-value"
-                    id="reportEnergySaved">
-
+                <strong id="reportEnergySaved">
                     -- kWh
-
-                </div>
+                </strong>
 
             </div>
 
@@ -1317,13 +1233,9 @@
                     Estimated Cost
                 </h4>
 
-                <div
-                    class="report-value"
-                    id="reportCost">
-
+                <strong id="reportCost">
                     ₹ --
-
-                </div>
+                </strong>
 
             </div>
 
@@ -1334,13 +1246,9 @@
                     Efficiency
                 </h4>
 
-                <div
-                    class="report-value"
-                    id="reportEfficiency">
-
+                <strong id="reportEfficiency">
                     -- %
-
-                </div>
+                </strong>
 
             </div>
 
@@ -1360,11 +1268,10 @@
             📈 Live Power Consumption
         </h2>
 
-
         <div class="chart-info">
 
             <span>
-                Updates automatically every 2 seconds
+                Updates automatically every 1 second
             </span>
 
             <span id="chartReading">
@@ -1380,7 +1287,6 @@
 
             <canvas
                 id="powerChart">
-
             </canvas>
 
         </div>
@@ -1423,29 +1329,49 @@
 
 
 // ==================================================
-// API BASE
+// API
 // ==================================================
 
 const API_BASE = "";
 
 
 // ==================================================
-// LIVE POWER HISTORY
+// VARIABLES
 // ==================================================
 
 const powerHistory = [];
 
 const MAX_CHART_POINTS = 30;
 
+let dashboardUpdating = false;
+
+let modeUpdating = false;
+
+let currentMode = "AUTO";
+
+
+// ==================================================
+// HELPER
+// ==================================================
+
+function getElement(id) {
+
+    return document.getElementById(id);
+
+}
+
 
 // ==================================================
 // UPDATE DEVICE STATUS
 // ==================================================
 
-function updateDeviceStatus(elementId, state) {
+function updateDeviceStatus(
+    elementId,
+    state
+) {
 
     const element =
-        document.getElementById(elementId);
+        getElement(elementId);
 
     if (!element) {
         return;
@@ -1483,21 +1409,24 @@ function updateZone(
 ) {
 
     const zone =
-        document.getElementById(zoneId);
+        getElement(zoneId);
 
     const status =
-        document.getElementById(statusId);
+        getElement(statusId);
 
     const lightElement =
-        document.getElementById(lightId);
+        getElement(lightId);
 
     if (
         !zone ||
         !status ||
         !lightElement
     ) {
+
         return;
+
     }
+
 
     if (Number(human) === 1) {
 
@@ -1517,6 +1446,7 @@ function updateZone(
 
     }
 
+
     lightElement.textContent =
         Number(light) === 1
         ? "ON"
@@ -1534,9 +1464,16 @@ function addPowerReading(power) {
     const numericPower =
         Number(power);
 
-    if (!Number.isFinite(numericPower)) {
+    if (
+        !Number.isFinite(
+            numericPower
+        )
+    ) {
+
         return;
+
     }
+
 
     const now =
         new Date();
@@ -1551,6 +1488,7 @@ function addPowerReading(power) {
             }
         );
 
+
     powerHistory.push({
 
         time: timeLabel,
@@ -1558,6 +1496,7 @@ function addPowerReading(power) {
         power: numericPower
 
     });
+
 
     if (
         powerHistory.length >
@@ -1568,25 +1507,25 @@ function addPowerReading(power) {
 
     }
 
+
     drawPowerChart();
 
 }
 
 
 // ==================================================
-// DRAW LIVE POWER CHART
+// DRAW CHART
 // ==================================================
 
 function drawPowerChart() {
 
     const canvas =
-        document.getElementById(
-            "powerChart"
-        );
+        getElement("powerChart");
 
     if (!canvas) {
         return;
     }
+
 
     const rect =
         canvas.getBoundingClientRect();
@@ -1595,11 +1534,15 @@ function drawPowerChart() {
         rect.width <= 0 ||
         rect.height <= 0
     ) {
+
         return;
+
     }
+
 
     const dpr =
         window.devicePixelRatio || 1;
+
 
     canvas.width =
         Math.floor(
@@ -1610,6 +1553,7 @@ function drawPowerChart() {
         Math.floor(
             rect.height * dpr
         );
+
 
     const ctx =
         canvas.getContext("2d");
@@ -1623,19 +1567,19 @@ function drawPowerChart() {
         0
     );
 
+
     const width =
         rect.width;
 
     const height =
         rect.height;
 
+
     const left = 60;
-
     const right = 20;
-
     const top = 25;
-
     const bottom = 45;
+
 
     const plotWidth =
         width -
@@ -1647,6 +1591,7 @@ function drawPowerChart() {
         top -
         bottom;
 
+
     ctx.clearRect(
         0,
         0,
@@ -1654,10 +1599,12 @@ function drawPowerChart() {
         height
     );
 
+
     const values =
         powerHistory.map(
             item => item.power
         );
+
 
     const maximumValue =
         Math.max(
@@ -1665,10 +1612,12 @@ function drawPowerChart() {
             ...values
         );
 
+
     const scaleMax =
         Math.ceil(
             maximumValue / 100
         ) * 100;
+
 
     ctx.fillStyle =
         "#f8fafc";
@@ -1680,6 +1629,9 @@ function drawPowerChart() {
         height
     );
 
+
+    // Y AXIS
+
     ctx.font =
         "12px Arial";
 
@@ -1688,6 +1640,7 @@ function drawPowerChart() {
 
     ctx.textBaseline =
         "middle";
+
 
     for (
         let i = 0;
@@ -1701,11 +1654,13 @@ function drawPowerChart() {
                 scaleMax / 4
             ) * i;
 
+
         const y =
             top +
             (
                 plotHeight / 4
             ) * i;
+
 
         ctx.beginPath();
 
@@ -1719,6 +1674,7 @@ function drawPowerChart() {
             y
         );
 
+
         ctx.strokeStyle =
             "#e2e8f0";
 
@@ -1726,20 +1682,21 @@ function drawPowerChart() {
 
         ctx.stroke();
 
+
         ctx.fillStyle =
             "#64748b";
 
         ctx.fillText(
             Math.round(value)
             + " W",
-
             left - 8,
-
             y
         );
 
     }
 
+
+    // NO DATA
 
     if (
         powerHistory.length === 0
@@ -1770,6 +1727,8 @@ function drawPowerChart() {
     }
 
 
+    // X AXIS
+
     ctx.font =
         "11px Arial";
 
@@ -1782,11 +1741,13 @@ function drawPowerChart() {
     ctx.textBaseline =
         "top";
 
+
     const labelCount =
         Math.min(
             5,
             powerHistory.length
         );
+
 
     for (
         let i = 0;
@@ -1808,6 +1769,7 @@ function drawPowerChart() {
                 )
             );
 
+
         const x =
             powerHistory.length === 1
 
@@ -1823,6 +1785,7 @@ function drawPowerChart() {
               ) *
               plotWidth;
 
+
         ctx.fillText(
             powerHistory[index].time,
             x,
@@ -1834,7 +1797,10 @@ function drawPowerChart() {
     }
 
 
+    // LINE
+
     ctx.beginPath();
+
 
     powerHistory.forEach(
         (item, index) => {
@@ -1854,6 +1820,7 @@ function drawPowerChart() {
                   ) *
                   plotWidth;
 
+
             const y =
                 top +
                 plotHeight -
@@ -1862,6 +1829,7 @@ function drawPowerChart() {
                     scaleMax
                 ) *
                 plotHeight;
+
 
             if (index === 0) {
 
@@ -1882,6 +1850,7 @@ function drawPowerChart() {
         }
     );
 
+
     ctx.strokeStyle =
         "#2563eb";
 
@@ -1895,6 +1864,8 @@ function drawPowerChart() {
 
     ctx.stroke();
 
+
+    // POINTS
 
     powerHistory.forEach(
         (item, index) => {
@@ -1914,6 +1885,7 @@ function drawPowerChart() {
                   ) *
                   plotWidth;
 
+
             const y =
                 top +
                 plotHeight -
@@ -1922,6 +1894,7 @@ function drawPowerChart() {
                     scaleMax
                 ) *
                 plotHeight;
+
 
             ctx.beginPath();
 
@@ -1942,10 +1915,13 @@ function drawPowerChart() {
     );
 
 
+    // CURRENT VALUE
+
     const latest =
         powerHistory[
             powerHistory.length - 1
         ];
+
 
     if (latest) {
 
@@ -1958,6 +1934,7 @@ function drawPowerChart() {
             : left +
               plotWidth;
 
+
         const y =
             top +
             plotHeight -
@@ -1966,6 +1943,7 @@ function drawPowerChart() {
                 scaleMax
             ) *
             plotHeight;
+
 
         ctx.font =
             "bold 12px Arial";
@@ -1979,9 +1957,9 @@ function drawPowerChart() {
         ctx.textBaseline =
             "bottom";
 
+
         ctx.fillText(
-            latest.power +
-            " W",
+            latest.power + " W",
             x,
             y - 8
         );
@@ -1997,75 +1975,51 @@ function drawPowerChart() {
 
 async function updateControlMode() {
 
+    if (modeUpdating) {
+        return;
+    }
+
+    modeUpdating = true;
+
+
     try {
 
         const response =
             await fetch(
                 API_BASE +
-                "/api/mode"
+                "/api/mode",
+                {
+                    cache: "no-store"
+                }
             );
+
 
         if (!response.ok) {
             return;
         }
 
+
         const result =
             await response.json();
+
 
         let mode =
             result.mode ||
             result.control_mode ||
             "AUTO";
 
+
         mode =
-            String(mode).toUpperCase();
+            String(mode)
+            .toUpperCase();
 
 
-        const modeElement =
-            document.getElementById(
-                "controlMode"
-            );
-
-        const modeButton =
-            document.getElementById(
-                "modeButton"
-            );
-
-        const manualNote =
-            document.getElementById(
-                "manualNote"
-            );
-
-
-        modeElement.textContent =
+        currentMode =
             mode;
 
 
-        if (mode === "MANUAL") {
+        updateModeUI(mode);
 
-            modeElement.className =
-                "mode-badge manual";
-
-            modeButton.textContent =
-                "Switch to AUTO";
-
-            manualNote.classList.add(
-                "show"
-            );
-
-        } else {
-
-            modeElement.className =
-                "mode-badge";
-
-            modeButton.textContent =
-                "Switch to MANUAL";
-
-            manualNote.classList.remove(
-                "show"
-            );
-
-        }
 
     } catch (error) {
 
@@ -2074,80 +2028,154 @@ async function updateControlMode() {
             error
         );
 
+    } finally {
+
+        modeUpdating = false;
+
     }
 
 }
 
 
 // ==================================================
-// TOGGLE AUTO / MANUAL
+// UPDATE MODE UI
+// ==================================================
+
+function updateModeUI(mode) {
+
+    const modeElement =
+        getElement("controlMode");
+
+    const modeButton =
+        getElement("modeButton");
+
+    const modeMessage =
+        getElement("modeMessage");
+
+
+    if (!modeElement) {
+        return;
+    }
+
+
+    modeElement.textContent =
+        mode;
+
+
+    if (mode === "MANUAL") {
+
+        modeElement.className =
+            "mode-badge manual";
+
+
+        if (modeButton) {
+
+            modeButton.textContent =
+                "Switch to AUTO";
+
+        }
+
+
+        if (modeMessage) {
+
+            modeMessage.textContent =
+                "Manual mode active";
+
+            modeMessage.style.color =
+                "#92400e";
+
+        }
+
+    } else {
+
+        modeElement.className =
+            "mode-badge";
+
+
+        if (modeButton) {
+
+            modeButton.textContent =
+                "Switch to MANUAL";
+
+        }
+
+
+        if (modeMessage) {
+
+            modeMessage.textContent =
+                "Automatic sensor control active";
+
+            modeMessage.style.color =
+                "#166534";
+
+        }
+
+    }
+
+}
+
+
+// ==================================================
+// TOGGLE CONTROL MODE
 // ==================================================
 
 async function toggleControlMode() {
+
+    const newMode =
+        currentMode === "AUTO"
+        ? "MANUAL"
+        : "AUTO";
+
+
+    const button =
+        getElement("modeButton");
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Changing...";
+
+    }
+
+
+    // ----------------------------------------------
+    // UPDATE UI IMMEDIATELY
+    // ----------------------------------------------
+
+    currentMode =
+        newMode;
+
+    updateModeUI(
+        newMode
+    );
+
 
     try {
 
         const response =
             await fetch(
                 API_BASE +
-                "/api/mode"
-            );
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Unable to get current mode"
-            );
-
-        }
-
-        const currentData =
-            await response.json();
-
-        let currentMode =
-            currentData.mode ||
-            currentData.control_mode ||
-            "AUTO";
-
-        currentMode =
-            String(
-                currentMode
-            ).toUpperCase();
-
-
-        const newMode =
-            currentMode === "AUTO"
-            ? "MANUAL"
-            : "AUTO";
-
-
-        const changeResponse =
-            await fetch(
-                API_BASE +
                 "/api/mode",
                 {
-
                     method: "POST",
 
                     headers: {
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
                         JSON.stringify({
-
                             mode: newMode
-
                         })
-
                 }
             );
 
 
-        if (!changeResponse.ok) {
+        if (!response.ok) {
 
             throw new Error(
                 "Mode change failed"
@@ -2157,42 +2185,70 @@ async function toggleControlMode() {
 
 
         const result =
-            await changeResponse.json();
+            await response.json();
 
 
         if (!result.success) {
 
             throw new Error(
                 result.message ||
-                "Unable to change mode"
+                "Mode change failed"
             );
 
         }
 
 
-        await updateControlMode();
+        // Immediately refresh
 
         await updateDashboard();
-
-
-        alert(
-            "System changed to " +
-            newMode +
-            " mode."
-        );
 
 
     } catch (error) {
 
         console.error(
-            "Mode change error:",
+            "Mode switch error:",
             error
         );
 
-        alert(
-            "Unable to change system mode. " +
-            "Please try again."
+
+        // Restore previous mode
+
+        currentMode =
+            newMode === "AUTO"
+            ? "MANUAL"
+            : "AUTO";
+
+
+        updateModeUI(
+            currentMode
         );
+
+
+        alert(
+            "Unable to change control mode."
+        );
+
+    } finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            if (
+                currentMode === "AUTO"
+            ) {
+
+                button.textContent =
+                    "Switch to MANUAL";
+
+            } else {
+
+                button.textContent =
+                    "Switch to AUTO";
+
+            }
+
+        }
 
     }
 
@@ -2205,18 +2261,29 @@ async function toggleControlMode() {
 
 async function updateDashboard() {
 
+    if (dashboardUpdating) {
+        return;
+    }
+
+
+    dashboardUpdating = true;
+
+
     try {
 
-
         // ------------------------------------------
-        // GET SENSOR DATA
+        // SENSOR DATA
         // ------------------------------------------
 
         const dataResponse =
             await fetch(
                 API_BASE +
-                "/api/data"
+                "/api/data",
+                {
+                    cache: "no-store"
+                }
             );
+
 
         if (!dataResponse.ok) {
 
@@ -2226,19 +2293,24 @@ async function updateDashboard() {
 
         }
 
+
         const dataResult =
             await dataResponse.json();
 
 
         // ------------------------------------------
-        // GET ENERGY DATA
+        // ENERGY DATA
         // ------------------------------------------
 
         const energyResponse =
             await fetch(
                 API_BASE +
-                "/api/energy"
+                "/api/energy",
+                {
+                    cache: "no-store"
+                }
             );
+
 
         if (!energyResponse.ok) {
 
@@ -2247,6 +2319,7 @@ async function updateDashboard() {
             );
 
         }
+
 
         const energy =
             await energyResponse.json();
@@ -2265,54 +2338,102 @@ async function updateDashboard() {
                 dataResult.data;
 
 
-            document.getElementById(
-                "temperature"
-            ).textContent =
+            // TEMPERATURE
+
+            const temperature =
                 Number(
                     data.temperature
-                ).toFixed(1)
-                + " °C";
+                );
 
 
-            document.getElementById(
-                "humidity"
+            getElement(
+                "temperature"
             ).textContent =
+                Number.isFinite(
+                    temperature
+                )
+                ? temperature.toFixed(1)
+                  + " °C"
+                : "-- °C";
+
+
+            // HUMIDITY
+
+            const humidity =
                 Number(
                     data.humidity
-                ).toFixed(1)
-                + " %";
+                );
 
 
-            document.getElementById(
-                "currentPower"
+            getElement(
+                "humidity"
             ).textContent =
+                Number.isFinite(
+                    humidity
+                )
+                ? humidity.toFixed(1)
+                  + " %"
+                : "-- %";
+
+
+            // CURRENT POWER
+
+            const currentPower =
                 Number(
                     energy.current_power
+                );
+
+
+            getElement(
+                "currentPower"
+            ).textContent =
+                Number.isFinite(
+                    currentPower
                 )
-                + " W";
+                ? currentPower + " W"
+                : "-- W";
 
 
-            addPowerReading(
-                energy.current_power
-            );
+            // CHART
+
+            if (
+                Number.isFinite(
+                    currentPower
+                )
+            ) {
+
+                addPowerReading(
+                    currentPower
+                );
+
+            }
 
 
             const chartReading =
-                document.getElementById(
+                getElement(
                     "chartReading"
                 );
+
 
             if (chartReading) {
 
                 chartReading.textContent =
                     "Current: "
                     +
-                    energy.current_power
+                    (
+                        Number.isFinite(
+                            currentPower
+                        )
+                        ? currentPower
+                        : "--"
+                    )
                     +
                     " W";
 
             }
 
+
+            // CLASSROOM
 
             const occupied =
                 Number(data.zone1) === 1 ||
@@ -2320,13 +2441,15 @@ async function updateDashboard() {
                 Number(data.zone3) === 1;
 
 
-            document.getElementById(
+            getElement(
                 "classroomStatus"
             ).textContent =
                 occupied
                 ? "OCCUPIED"
                 : "EMPTY";
 
+
+            // ZONE 1
 
             updateZone(
                 "zone1",
@@ -2337,6 +2460,8 @@ async function updateDashboard() {
             );
 
 
+            // ZONE 2
+
             updateZone(
                 "zone2",
                 "zone2Status",
@@ -2345,6 +2470,8 @@ async function updateDashboard() {
                 data.light2
             );
 
+
+            // ZONE 3
 
             updateZone(
                 "zone3",
@@ -2355,29 +2482,27 @@ async function updateDashboard() {
             );
 
 
+            // DEVICES
+
             updateDeviceStatus(
                 "light1Status",
                 data.light1
             );
-
 
             updateDeviceStatus(
                 "light2Status",
                 data.light2
             );
 
-
             updateDeviceStatus(
                 "light3Status",
                 data.light3
             );
 
-
             updateDeviceStatus(
                 "fanStatus",
                 data.fan
             );
-
 
             updateDeviceStatus(
                 "acStatus",
@@ -2385,19 +2510,23 @@ async function updateDashboard() {
             );
 
 
-            document.getElementById(
+            // CONNECTION
+
+            getElement(
                 "connectionStatus"
             ).textContent =
                 "CONNECTED";
 
 
-            document.getElementById(
+            getElement(
                 "connectionStatus"
             ).className =
                 "connected";
 
 
-            document.getElementById(
+            // LAST UPDATE
+
+            getElement(
                 "lastUpdate"
             ).textContent =
                 data.timestamp;
@@ -2409,56 +2538,106 @@ async function updateDashboard() {
         // ENERGY DATA
         // ==========================================
 
-        document.getElementById(
-            "averagePower"
-        ).textContent =
+        const averagePower =
             Number(
                 energy.average_power
+            );
+
+
+        getElement(
+            "averagePower"
+        ).textContent =
+            (
+                Number.isFinite(
+                    averagePower
+                )
+                ? averagePower
+                : 0
             )
             + " W";
 
 
-        document.getElementById(
-            "energyConsumed"
-        ).textContent =
+        const energyConsumed =
             Number(
                 energy.energy_consumed_kwh
+            );
+
+
+        getElement(
+            "energyConsumed"
+        ).textContent =
+            (
+                Number.isFinite(
+                    energyConsumed
+                )
+                ? energyConsumed
+                : 0
             )
             + " kWh";
 
 
-        document.getElementById(
-            "energySaved"
-        ).textContent =
+        const energySaved =
             Number(
                 energy.energy_saved_kwh
+            );
+
+
+        getElement(
+            "energySaved"
+        ).textContent =
+            (
+                Number.isFinite(
+                    energySaved
+                )
+                ? energySaved
+                : 0
             )
             + " kWh";
 
 
-        document.getElementById(
-            "savingPercentage"
-        ).textContent =
+        const savingPercentage =
             Number(
                 energy.energy_saving_percentage
+            );
+
+
+        getElement(
+            "savingPercentage"
+        ).textContent =
+            (
+                Number.isFinite(
+                    savingPercentage
+                )
+                ? savingPercentage
+                : 0
             )
             + " %";
 
 
-        document.getElementById(
-            "estimatedCost"
-        ).textContent =
-            "₹ "
-            +
+        const estimatedCost =
             Number(
                 energy.estimated_cost
             );
 
 
-        document.getElementById(
+        getElement(
+            "estimatedCost"
+        ).textContent =
+            "₹ "
+            +
+            (
+                Number.isFinite(
+                    estimatedCost
+                )
+                ? estimatedCost
+                : 0
+            );
+
+
+        getElement(
             "totalRecords"
         ).textContent =
-            energy.total_records;
+            energy.total_records || 0;
 
 
         // ==========================================
@@ -2472,72 +2651,90 @@ async function updateDashboard() {
                 1695
             );
 
-        const currentPower =
+
+        const smartPower =
             Number(
                 energy.current_power || 0
             );
+
 
         const powerSaved =
             Math.max(
                 0,
                 maximumPower -
-                currentPower
+                smartPower
             );
 
 
-        document.getElementById(
+        const efficiency =
+            maximumPower > 0
+
+            ? (
+                powerSaved /
+                maximumPower
+            ) * 100
+
+            : 0;
+
+
+        getElement(
             "baselinePower"
         ).textContent =
             maximumPower +
             " W";
 
 
-        document.getElementById(
+        getElement(
             "smartPower"
         ).textContent =
-            currentPower +
+            smartPower +
             " W";
 
 
-        document.getElementById(
+        getElement(
             "powerSavedNow"
         ).textContent =
-            powerSaved +
+            powerSaved.toFixed(0) +
             " W";
 
 
-        document.getElementById(
+        getElement(
             "reportEnergySaved"
         ).textContent =
-            Number(
-                energy.energy_saved_kwh || 0
+            (
+                Number.isFinite(
+                    energySaved
+                )
+                ? energySaved
+                : 0
             )
             +
             " kWh";
 
 
-        document.getElementById(
+        getElement(
             "reportCost"
         ).textContent =
             "₹ "
             +
-            Number(
-                energy.estimated_cost || 0
+            (
+                Number.isFinite(
+                    estimatedCost
+                )
+                ? estimatedCost
+                : 0
             );
 
 
-        document.getElementById(
+        getElement(
             "reportEfficiency"
         ).textContent =
-            Number(
-                energy.energy_saving_percentage || 0
-            )
+            efficiency.toFixed(1)
             +
             " %";
 
 
     } catch (error) {
-
 
         console.error(
             "Dashboard error:",
@@ -2545,16 +2742,20 @@ async function updateDashboard() {
         );
 
 
-        document.getElementById(
+        getElement(
             "connectionStatus"
         ).textContent =
             "DISCONNECTED";
 
 
-        document.getElementById(
+        getElement(
             "connectionStatus"
         ).className =
             "disconnected";
+
+    } finally {
+
+        dashboardUpdating = false;
 
     }
 
@@ -2567,40 +2768,25 @@ async function updateDashboard() {
 
 async function manualControl(device) {
 
+    // ----------------------------------------------
+    // CHECK MODE FIRST
+    // ----------------------------------------------
+
+    if (
+        currentMode !==
+        "MANUAL"
+    ) {
+
+        alert(
+            "Please switch to MANUAL mode first."
+        );
+
+        return;
+
+    }
+
+
     try {
-
-
-        // ------------------------------------------
-        // CHECK MODE FIRST
-        // ------------------------------------------
-
-        const modeResponse =
-            await fetch(
-                API_BASE +
-                "/api/mode"
-            );
-
-        const modeData =
-            await modeResponse.json();
-
-        const mode =
-            String(
-                modeData.mode ||
-                modeData.control_mode ||
-                "AUTO"
-            ).toUpperCase();
-
-
-        if (mode !== "MANUAL") {
-
-            alert(
-                "Please switch the system to MANUAL mode first."
-            );
-
-            return;
-
-        }
-
 
         // ------------------------------------------
         // GET CURRENT CONTROL STATE
@@ -2609,7 +2795,10 @@ async function manualControl(device) {
         const currentResponse =
             await fetch(
                 API_BASE +
-                "/api/control"
+                "/api/control",
+                {
+                    cache: "no-store"
+                }
             );
 
 
@@ -2627,7 +2816,8 @@ async function manualControl(device) {
 
 
         const controls =
-            currentData.controls || {};
+            currentData.controls ||
+            {};
 
 
         const currentState =
@@ -2635,10 +2825,6 @@ async function manualControl(device) {
                 controls[device] || 0
             );
 
-
-        // ------------------------------------------
-        // TOGGLE
-        // ------------------------------------------
 
         const newState =
             currentState === 1
@@ -2655,14 +2841,11 @@ async function manualControl(device) {
                 API_BASE +
                 "/api/control",
                 {
-
                     method: "POST",
 
                     headers: {
-
                         "Content-Type":
                             "application/json"
-
                     },
 
                     body:
@@ -2675,7 +2858,6 @@ async function manualControl(device) {
                                 newState
 
                         })
-
                 }
             );
 
@@ -2714,13 +2896,13 @@ async function manualControl(device) {
         );
 
 
+        // ------------------------------------------
+        // UPDATE DASHBOARD IMMEDIATELY
+        // ------------------------------------------
+
         await updateDashboard();
 
-        await updateControlMode();
-
-
     } catch (error) {
-
 
         console.error(
             "Manual control error:",
@@ -2749,17 +2931,23 @@ async function resetControls() {
 
     try {
 
-
         const response =
             await fetch(
                 API_BASE +
                 "/api/control/reset",
                 {
-
                     method: "POST"
-
                 }
             );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Reset request failed"
+            );
+
+        }
 
 
         const result =
@@ -2768,19 +2956,13 @@ async function resetControls() {
 
         if (result.success) {
 
+            await updateDashboard();
 
             alert(
                 "All manual controls reset."
             );
 
-
-            await updateDashboard();
-
-            await updateControlMode();
-
-
         } else {
-
 
             alert(
                 "Reset failed."
@@ -2788,9 +2970,7 @@ async function resetControls() {
 
         }
 
-
     } catch (error) {
-
 
         console.error(
             "Reset error:",
@@ -2808,7 +2988,7 @@ async function resetControls() {
 
 
 // ==================================================
-// WINDOW RESIZE
+// RESIZE
 // ==================================================
 
 window.addEventListener(
@@ -2831,23 +3011,23 @@ updateControlMode();
 
 
 // ==================================================
-// AUTO REFRESH
+// FAST AUTO REFRESH
 // ==================================================
 
 setInterval(
     updateDashboard,
-    2000
+    1000
 );
 
 
 setInterval(
     updateControlMode,
-    2000
+    1000
 );
 
 
 // ==================================================
-// INITIAL CHART DRAW
+// INITIAL CHART
 // ==================================================
 
 setTimeout(
