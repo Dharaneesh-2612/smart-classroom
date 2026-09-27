@@ -5,665 +5,30 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 
-# =====================================================
-# DATA STORAGE
-# =====================================================
+# ==========================================
+# SENSOR DATA STORAGE
+# ==========================================
 
 records = []
 
+# ==========================================
+# POWER CONFIGURATION
+# ==========================================
 
-# =====================================================
-# POWER SETTINGS
-# =====================================================
-
-LIGHT_POWER = 40       # Watts per light
-FAN_POWER = 75         # Watts
-AC_POWER = 1500        # Watts
+LIGHT_POWER = 40
+FAN_POWER = 75
+AC_POWER = 1500
 
 NUMBER_OF_LIGHTS = 3
 
 MAX_POWER = (
-    (LIGHT_POWER * NUMBER_OF_LIGHTS)
+    LIGHT_POWER * NUMBER_OF_LIGHTS
     + FAN_POWER
     + AC_POWER
 )
 
-# Prototype electricity tariff
-# Change this to your actual tariff later
-ELECTRICITY_TARIFF = 8.0   # ₹ per kWh
+ELECTRICITY_TARIFF = 8.0
 
-
-# =====================================================
-# CALCULATE CURRENT POWER
-# =====================================================
-
-def calculate_power(data):
-
-    light1 = int(data.get("light1", 0))
-    light2 = int(data.get("light2", 0))
-    light3 = int(data.get("light3", 0))
-
-    fan = int(data.get("fan", 0))
-    ac = int(data.get("ac", 0))
-
-
-    # Light power
-    light_power = (
-        (light1 + light2 + light3)
-        * LIGHT_POWER
-    )
-
-
-    # Fan power
-    fan_power = fan * FAN_POWER
-
-
-    # AC power
-    ac_power = ac * AC_POWER
-
-
-    # Total instantaneous power
-    total_power = (
-        light_power
-        + fan_power
-        + ac_power
-    )
-
-
-    return {
-        "light_power": light_power,
-        "fan_power": fan_power,
-        "ac_power": ac_power,
-        "total_power": total_power
-    }
-
-
-# =====================================================
-# CALCULATE ENERGY FROM RECORDS
-# =====================================================
-
-def calculate_energy():
-
-    if len(records) < 2:
-
-        return {
-            "energy_consumed_kwh": 0,
-            "energy_saved_kwh": 0,
-            "estimated_cost": 0,
-            "energy_saving_percentage": 0
-        }
-
-
-    consumed_wh = 0
-    saved_wh = 0
-
-
-    for i in range(1, len(records)):
-
-        previous = records[i - 1]
-        current = records[i]
-
-
-        # ---------------------------------------------
-        # Time difference
-        # ---------------------------------------------
-
-        try:
-
-            previous_time = datetime.fromisoformat(
-                previous["timestamp"]
-            )
-
-            current_time = datetime.fromisoformat(
-                current["timestamp"]
-            )
-
-            seconds = (
-                current_time - previous_time
-            ).total_seconds()
-
-        except Exception:
-
-            seconds = 5
-
-
-        # Prevent abnormal time intervals
-        if seconds <= 0 or seconds > 300:
-            seconds = 5
-
-
-        hours = seconds / 3600
-
-
-        # ---------------------------------------------
-        # Current power
-        # ---------------------------------------------
-
-        current_power = float(
-            current.get("total_power", 0)
-        )
-
-
-        # ---------------------------------------------
-        # Energy actually consumed
-        # ---------------------------------------------
-
-        consumed_wh += (
-            current_power * hours
-        )
-
-
-        # ---------------------------------------------
-        # Energy that would have been consumed
-        # if maximum equipment was continuously ON
-        # ---------------------------------------------
-
-        saved_power = max(
-            0,
-            MAX_POWER - current_power
-        )
-
-
-        saved_wh += (
-            saved_power * hours
-        )
-
-
-    # Convert Wh → kWh
-
-    consumed_kwh = (
-        consumed_wh / 1000
-    )
-
-    saved_kwh = (
-        saved_wh / 1000
-    )
-
-
-    # Estimated electricity cost
-
-    estimated_cost = (
-        consumed_kwh
-        * ELECTRICITY_TARIFF
-    )
-
-
-    # Saving percentage
-
-    total_possible_energy = (
-        consumed_kwh + saved_kwh
-    )
-
-
-    if total_possible_energy > 0:
-
-        saving_percentage = (
-            saved_kwh
-            / total_possible_energy
-        ) * 100
-
-    else:
-
-        saving_percentage = 0
-
-
-    return {
-
-        "energy_consumed_kwh":
-            round(consumed_kwh, 4),
-
-        "energy_saved_kwh":
-            round(saved_kwh, 4),
-
-        "estimated_cost":
-            round(estimated_cost, 2),
-
-        "energy_saving_percentage":
-            round(saving_percentage, 2)
-    }
-
-
-# =====================================================
-# CLASSROOM DASHBOARD
-# =====================================================
-
-@app.route("/")
-def dashboard():
-
-    return render_template(
-        "index.html"
-    )
-
-
-# =====================================================
-# RECEIVE ESP32 DATA
-# =====================================================
-
-@app.route(
-    "/api/data",
-    methods=["POST"]
-)
-def receive_data():
-
-    data = request.get_json()
-
-
-    # ---------------------------------------------
-    # Validate data
-    # ---------------------------------------------
-
-    if not data:
-
-        return jsonify({
-
-            "success": False,
-
-            "message":
-                "No data received"
-
-        }), 400
-
-
-    # ---------------------------------------------
-    # Timestamp
-    # ---------------------------------------------
-
-    data["timestamp"] = (
-        datetime.now().isoformat()
-    )
-
-
-    # ---------------------------------------------
-    # Calculate power
-    # ---------------------------------------------
-
-    power = calculate_power(
-        data
-    )
-
-
-    data["light_power"] = (
-        power["light_power"]
-    )
-
-    data["fan_power"] = (
-        power["fan_power"]
-    )
-
-    data["ac_power"] = (
-        power["ac_power"]
-    )
-
-    data["total_power"] = (
-        power["total_power"]
-    )
-
-
-    # ---------------------------------------------
-    # Occupancy
-    # ---------------------------------------------
-
-    zone1 = int(
-        data.get("zone1", 0)
-    )
-
-    zone2 = int(
-        data.get("zone2", 0)
-    )
-
-    zone3 = int(
-        data.get("zone3", 0)
-    )
-
-
-    human_present = (
-        zone1 == 1
-        or zone2 == 1
-        or zone3 == 1
-    )
-
-
-    if human_present:
-
-        data["occupancy"] = "OCCUPIED"
-
-        data["energy_saving_active"] = False
-
-    else:
-
-        data["occupancy"] = "EMPTY"
-
-        data["energy_saving_active"] = True
-
-
-    # ---------------------------------------------
-    # Store record
-    # ---------------------------------------------
-
-    records.append(data)
-
-
-    # Keep latest 500 records
-
-    if len(records) > 500:
-
-        records.pop(0)
-
-
-    # ---------------------------------------------
-    # Calculate energy
-    # ---------------------------------------------
-
-    energy = calculate_energy()
-
-
-    # ---------------------------------------------
-    # Print information
-    # ---------------------------------------------
-
-    print()
-    print("======================================")
-    print("       SMART CLASSROOM DATA")
-    print("======================================")
-
-    print(
-        "Temperature:",
-        data.get("temperature"),
-        "°C"
-    )
-
-    print(
-        "Humidity:",
-        data.get("humidity"),
-        "%"
-    )
-
-    print(
-        "Zone 1:",
-        zone1
-    )
-
-    print(
-        "Zone 2:",
-        zone2
-    )
-
-    print(
-        "Zone 3:",
-        zone3
-    )
-
-    print(
-        "Light 1:",
-        data.get("light1")
-    )
-
-    print(
-        "Light 2:",
-        data.get("light2")
-    )
-
-    print(
-        "Light 3:",
-        data.get("light3")
-    )
-
-    print(
-        "Fan:",
-        data.get("fan")
-    )
-
-    print(
-        "AC:",
-        data.get("ac")
-    )
-
-    print(
-        "Current Power:",
-        data["total_power"],
-        "W"
-    )
-
-    print(
-        "Energy Consumed:",
-        energy["energy_consumed_kwh"],
-        "kWh"
-    )
-
-    print(
-        "Energy Saved:",
-        energy["energy_saved_kwh"],
-        "kWh"
-    )
-
-    print(
-        "Estimated Cost: ₹",
-        energy["estimated_cost"]
-    )
-
-    print(
-        "Energy Saving:",
-        energy["energy_saving_percentage"],
-        "%"
-    )
-
-    print(
-        "Occupancy:",
-        data["occupancy"]
-    )
-
-    print(
-        "Total Records:",
-        len(records)
-    )
-
-    print(
-        "======================================"
-    )
-
-
-    # ---------------------------------------------
-    # Response
-    # ---------------------------------------------
-
-    return jsonify({
-
-        "success": True,
-
-        "message":
-            "Data received successfully",
-
-        "power": power,
-
-        "energy": energy,
-
-        "occupancy":
-            data["occupancy"],
-
-        "energy_saving_active":
-            data["energy_saving_active"]
-
-    })
-
-
-# =====================================================
-# GET LATEST DATA
-# =====================================================
-
-@app.route(
-    "/api/data",
-    methods=["GET"]
-)
-def get_data():
-
-    if len(records) == 0:
-
-        return jsonify({
-
-            "message":
-                "No data available"
-
-        })
-
-
-    latest = records[-1]
-
-
-    # Add current energy information
-
-    energy = calculate_energy()
-
-
-    response = dict(latest)
-
-
-    response["energy_consumed_kwh"] = (
-        energy["energy_consumed_kwh"]
-    )
-
-    response["energy_saved_kwh"] = (
-        energy["energy_saved_kwh"]
-    )
-
-    response["estimated_cost"] = (
-        energy["estimated_cost"]
-    )
-
-    response["energy_saving_percentage"] = (
-        energy["energy_saving_percentage"]
-    )
-
-    response["maximum_possible_power"] = (
-        MAX_POWER
-    )
-
-
-    return jsonify(response)
-
-
-# =====================================================
-# GET HISTORY
-# =====================================================
-
-@app.route(
-    "/api/history",
-    methods=["GET"]
-)
-def get_history():
-
-    return jsonify(records)
-
-
-# =====================================================
-# ENERGY SUMMARY
-# =====================================================
-
-@app.route(
-    "/api/energy",
-    methods=["GET"]
-)
-def energy_summary():
-
-    energy = calculate_energy()
-
-
-    if len(records) == 0:
-
-        return jsonify({
-
-            "total_records": 0,
-
-            "current_power": 0,
-
-            "average_power": 0,
-
-            "maximum_power": 0,
-
-            "minimum_power": 0,
-
-            "energy_consumed_kwh": 0,
-
-            "energy_saved_kwh": 0,
-
-            "estimated_cost": 0,
-
-            "energy_saving_percentage": 0,
-
-            "maximum_possible_power":
-                MAX_POWER,
-
-            "electricity_tariff":
-                ELECTRICITY_TARIFF
-
-        })
-
-
-    # ---------------------------------------------
-    # Power values
-    # ---------------------------------------------
-
-    power_values = [
-
-        float(
-            record.get(
-                "total_power",
-                0
-            )
-        )
-
-        for record in records
-
-    ]
-
-
-    return jsonify({
-
-        "total_records":
-            len(records),
-
-        "current_power":
-            power_values[-1],
-
-        "average_power":
-            round(
-                sum(power_values)
-                / len(power_values),
-                2
-            ),
-
-        "maximum_power":
-            max(power_values),
-
-        "minimum_power":
-            min(power_values),
-
-        "energy_consumed_kwh":
-            energy[
-                "energy_consumed_kwh"
-            ],
-
-        "energy_saved_kwh":
-            energy[
-                "energy_saved_kwh"
-            ],
-
-        "estimated_cost":
-            energy[
-                "estimated_cost"
-            ],
-
-        "energy_saving_percentage":
-            energy[
-                "energy_saving_percentage"
-            ],
-
-        "maximum_possible_power":
-            MAX_POWER,
-
-        "electricity_tariff":
-            ELECTRICITY_TARIFF
-
-    })
 
 # ==========================================
 # MANUAL CONTROL
@@ -678,12 +43,260 @@ manual_controls = {
 }
 
 
+# ==========================================
+# HOME PAGE
+# ==========================================
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
+# ==========================================
+# RECEIVE ESP32 DATA
+# ==========================================
+
+@app.route("/api/data", methods=["POST"])
+def receive_data():
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "success": False,
+            "message": "No data received"
+        }), 400
+
+    try:
+
+        record = {
+            "timestamp": datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+
+            "zone1": int(data.get("zone1", 0)),
+            "zone2": int(data.get("zone2", 0)),
+            "zone3": int(data.get("zone3", 0)),
+
+            "temperature": float(
+                data.get("temperature", 0)
+            ),
+
+            "humidity": float(
+                data.get("humidity", 0)
+            ),
+
+            "light1": int(data.get("light1", 0)),
+            "light2": int(data.get("light2", 0)),
+            "light3": int(data.get("light3", 0)),
+
+            "fan": int(data.get("fan", 0)),
+            "ac": int(data.get("ac", 0))
+        }
+
+        records.append(record)
+
+        # Keep latest 500 records
+        if len(records) > 500:
+            records.pop(0)
+
+        print()
+        print("======================================")
+        print("ESP32 DATA RECEIVED")
+        print("======================================")
+        print(record)
+
+        return jsonify({
+            "success": True,
+            "message": "Data received successfully",
+            "data": record
+        })
+
+    except Exception as e:
+
+        print("Data error:", e)
+
+        return jsonify({
+            "success": False,
+            "message": str(e)
+        }), 400
+
+
+# ==========================================
+# GET LATEST DATA
+# ==========================================
+
+@app.route("/api/data", methods=["GET"])
+def get_data():
+
+    if not records:
+        return jsonify({
+            "success": True,
+            "data": None
+        })
+
+    return jsonify({
+        "success": True,
+        "data": records[-1]
+    })
+
+
+# ==========================================
+# GET HISTORY
+# ==========================================
+
+@app.route("/api/history", methods=["GET"])
+def get_history():
+
+    return jsonify({
+        "success": True,
+        "records": records
+    })
+
+
+# ==========================================
+# ENERGY CALCULATION
+# ==========================================
+
+@app.route("/api/energy", methods=["GET"])
+def get_energy():
+
+    if not records:
+
+        return jsonify({
+            "average_power": 0,
+            "current_power": 0,
+            "energy_consumed_kwh": 0,
+            "energy_saved_kwh": 0,
+            "energy_saving_percentage": 0,
+            "estimated_cost": 0,
+            "maximum_possible_power": MAX_POWER,
+            "maximum_power": 0,
+            "minimum_power": 0,
+            "electricity_tariff": ELECTRICITY_TARIFF,
+            "total_records": 0
+        })
+
+    power_values = []
+
+    for record in records:
+
+        power = 0
+
+        power += record["light1"] * LIGHT_POWER
+        power += record["light2"] * LIGHT_POWER
+        power += record["light3"] * LIGHT_POWER
+
+        power += record["fan"] * FAN_POWER
+        power += record["ac"] * AC_POWER
+
+        power_values.append(power)
+
+    current_power = power_values[-1]
+
+    average_power = (
+        sum(power_values) / len(power_values)
+    )
+
+    maximum_power = max(power_values)
+    minimum_power = min(power_values)
+
+    # Each ESP32 reading is approximately 5 seconds apart
+    interval_hours = 5 / 3600
+
+    energy_consumed_kwh = (
+        sum(power_values)
+        * interval_hours
+        / 1000
+    )
+
+    energy_saved_kwh = (
+        max(
+            0,
+            MAX_POWER * len(power_values)
+            - sum(power_values)
+        )
+        * interval_hours
+        / 1000
+    )
+
+    saving_percentage = 0
+
+    if MAX_POWER > 0:
+
+        saving_percentage = (
+            energy_saved_kwh
+            /
+            (
+                MAX_POWER
+                * len(power_values)
+                * interval_hours
+                / 1000
+            )
+        ) * 100
+
+    estimated_cost = (
+        energy_consumed_kwh
+        * ELECTRICITY_TARIFF
+    )
+
+    return jsonify({
+
+        "average_power": round(
+            average_power,
+            2
+        ),
+
+        "current_power": round(
+            current_power,
+            2
+        ),
+
+        "energy_consumed_kwh": round(
+            energy_consumed_kwh,
+            4
+        ),
+
+        "energy_saved_kwh": round(
+            energy_saved_kwh,
+            4
+        ),
+
+        "energy_saving_percentage": round(
+            saving_percentage,
+            2
+        ),
+
+        "estimated_cost": round(
+            estimated_cost,
+            2
+        ),
+
+        "maximum_possible_power": MAX_POWER,
+
+        "maximum_power": maximum_power,
+
+        "minimum_power": minimum_power,
+
+        "electricity_tariff":
+            ELECTRICITY_TARIFF,
+
+        "total_records":
+            len(records)
+    })
+
+
+# ==========================================
+# MANUAL CONTROL - POST
+# ==========================================
+
 @app.route("/api/control", methods=["POST"])
 def manual_control():
 
     data = request.get_json()
 
     if not data:
+
         return jsonify({
             "success": False,
             "message": "No control data received"
@@ -692,13 +305,17 @@ def manual_control():
     device = data.get("device")
     state = data.get("state")
 
+    # Check device
     if device not in manual_controls:
+
         return jsonify({
             "success": False,
             "message": "Invalid device"
         }), 400
 
+    # Check state
     if state not in [0, 1]:
+
         return jsonify({
             "success": False,
             "message": "Invalid state"
@@ -708,36 +325,83 @@ def manual_control():
 
     print()
     print("======================================")
-    print("       MANUAL CONTROL")
+    print("          MANUAL CONTROL")
     print("======================================")
+
     print("Device:", device)
-    print("State:", "ON" if state == 1 else "OFF")
+
+    print(
+        "State:",
+        "ON" if state == 1 else "OFF"
+    )
+
     print("======================================")
 
     return jsonify({
+
         "success": True,
+
         "device": device,
+
         "state": state,
-        "message": device + " turned " +
-                  ("ON" if state == 1 else "OFF")
+
+        "message":
+            device
+            + " turned "
+            + (
+                "ON"
+                if state == 1
+                else "OFF"
+            )
     })
 
+
+# ==========================================
+# MANUAL CONTROL - GET
+# ==========================================
 
 @app.route("/api/control", methods=["GET"])
 def get_manual_control():
 
     return jsonify({
+
         "success": True,
+
         "controls": manual_controls
     })
-# =====================================================
-# RUN APPLICATION
-# =====================================================
+
+
+# ==========================================
+# RESET MANUAL CONTROLS
+# ==========================================
+
+@app.route("/api/control/reset", methods=["POST"])
+def reset_manual_control():
+
+    for device in manual_controls:
+
+        manual_controls[device] = 0
+
+    return jsonify({
+
+        "success": True,
+
+        "message":
+            "All manual controls reset",
+
+        "controls":
+            manual_controls
+    })
+
+
+# ==========================================
+# SERVER
+# ==========================================
 
 if __name__ == "__main__":
 
     app.run(
         host="0.0.0.0",
         port=5000,
-        debug=False
+        debug=True
     )

@@ -1,29 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Smart Classroom Energy Monitor</title>
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
         }
 
         body {
-            background: #f4f7fb;
-            color: #222;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f8fafc
+                );
+
+            color: #1e293b;
+
+            min-height: 100vh;
         }
 
         header {
-            background: #1f2937;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1e3a8a,
+                    #2563eb
+                );
+
             color: white;
-            padding: 20px;
+
+            padding: 25px;
+
             text-align: center;
+
+            box-shadow:
+                0 4px 15px
+                rgba(0,0,0,0.15);
         }
 
         header h1 {
@@ -31,210 +59,36 @@
         }
 
         header p {
-            color: #d1d5db;
+            opacity: 0.9;
         }
 
         .container {
-            width: 95%;
-            max-width: 1300px;
-            margin: 25px auto;
-        }
 
-        .status-card {
-            background: white;
+            max-width: 1200px;
+
+            margin: auto;
+
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-            text-align: center;
         }
 
         .status {
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
 
-        .occupied {
-            color: #dc2626;
-        }
-
-        .empty {
-            color: #16a34a;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 18px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .card h3 {
-            color: #6b7280;
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-
-        .value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #111827;
-        }
-
-        .unit {
-            font-size: 15px;
-            color: #6b7280;
-        }
-
-        .energy-section {
-            margin-top: 25px;
-        }
-
-        .energy-section h2 {
-            margin-bottom: 15px;
-        }
-
-        .energy-card {
-            border-left: 5px solid #16a34a;
-        }
-
-        .saving {
-            color: #16a34a;
-        }
-
-        .cost {
-            color: #2563eb;
-        }
-
-        .zones {
-            margin-top: 25px;
-        }
-
-        .zone {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
             padding: 18px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
 
-        .zone-name {
-            font-weight: bold;
-        }
+            border-radius: 12px;
 
-        .zone-status {
-            font-weight: bold;
-        }
-
-        .on {
-            color: #16a34a;
-        }
-
-        .off {
-            color: #6b7280;
-        }
-
-        .devices {
-            margin-top: 25px;
-        }
-
-        .device {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
             background: white;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
 
-        .device-name {
-            font-weight: bold;
-        }
+            margin-bottom: 25px;
 
-        .device-status {
-            font-weight: bold;
-        }
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
 
-        .energy-active {
-            background: #dcfce7;
-            color: #166534;
-            padding: 12px;
-            border-radius: 8px;
             text-align: center;
-            font-weight: bold;
-            margin-top: 15px;
-        }
 
-        .energy-inactive {
-            background: #fee2e2;
-            color: #991b1b;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            margin-top: 15px;
-        }
+            font-size: 20px;
 
-        .control-section {
-            margin-top: 30px;
-        }
-
-        .control-section h2 {
-            margin-bottom: 15px;
-        }
-
-        .control-button {
-            border: none;
-            padding: 10px 18px;
-            border-radius: 7px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            background: #2563eb;
-            color: white;
-            transition: 0.2s;
-        }
-
-        .control-button:hover {
-            opacity: 0.85;
-            transform: scale(1.03);
-        }
-
-        .control-button:active {
-            transform: scale(0.98);
-        }
-
-        .control-note {
-            margin-top: 15px;
-            padding: 12px;
-            background: #fff7ed;
-            color: #9a3412;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding: 20px;
-            color: #6b7280;
-        }
-
-        #connection {
             font-weight: bold;
         }
 
@@ -246,41 +100,265 @@
             color: #dc2626;
         }
 
-        @media (max-width: 600px) {
+        .grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 20px;
+
+            margin-bottom: 25px;
+        }
+
+        .card {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+
+            text-align: center;
+        }
+
+        .card h3 {
+
+            margin-bottom: 12px;
+
+            color: #475569;
+        }
+
+        .value {
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+        }
+
+        .section {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 4px 12px
+                rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+
+            margin-bottom: 20px;
+
+            color: #1e3a8a;
+        }
+
+        .zones {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .zone {
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            background: #f8fafc;
+
+            border: 2px solid #e2e8f0;
+
+            text-align: center;
+        }
+
+        .zone.active {
+
+            border-color: #22c55e;
+
+            background: #f0fdf4;
+        }
+
+        .zone.empty {
+
+            border-color: #cbd5e1;
+
+            background: #f8fafc;
+        }
+
+        .device-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(180px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .device {
+
+            padding: 20px;
+
+            background: #f8fafc;
+
+            border-radius: 12px;
+
+            text-align: center;
+
+            border: 1px solid #e2e8f0;
+        }
+
+        .device-status {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin: 10px;
+        }
+
+        .on {
+            color: #16a34a;
+        }
+
+        .off {
+            color: #64748b;
+        }
+
+        button {
+
+            border: none;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 15px;
+
+            margin: 4px;
+        }
+
+        button:hover {
+
+            background: #1d4ed8;
+        }
+
+        .reset {
+
+            background: #dc2626;
+        }
+
+        .reset:hover {
+
+            background: #b91c1c;
+        }
+
+        .energy-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(200px, 1fr)
+                );
+
+            gap: 20px;
+        }
+
+        .energy-item {
+
+            padding: 18px;
+
+            background: #f8fafc;
+
+            border-radius: 10px;
+
+            text-align: center;
+        }
+
+        .energy-item h4 {
+
+            color: #64748b;
+
+            margin-bottom: 8px;
+        }
+
+        .energy-item strong {
+
+            font-size: 24px;
+
+            color: #2563eb;
+        }
+
+        .footer {
+
+            text-align: center;
+
+            color: #64748b;
+
+            padding: 20px;
+        }
+
+        @media(max-width:600px) {
+
+            .container {
+                padding: 15px;
+            }
 
             header h1 {
-                font-size: 22px;
-            }
-
-            .status {
-                font-size: 23px;
-            }
-
-            .value {
                 font-size: 24px;
             }
 
-            .device {
-                flex-direction: column;
-                gap: 10px;
-                align-items: flex-start;
-            }
-
-            .control-button {
-                width: 100%;
+            .value {
+                font-size: 25px;
             }
         }
+
     </style>
+
 </head>
 
 <body>
 
 <header>
 
-    <h1>⚡ Smart Classroom Energy Monitor</h1>
+    <h1>Smart Classroom Energy Monitor</h1>
 
     <p>
-        IoT Based Automatic Energy Management System
+        IoT Based Energy Saving and Automation System
     </p>
 
 </header>
@@ -288,24 +366,23 @@
 
 <div class="container">
 
-    <!-- CLASSROOM STATUS -->
+    <!-- CONNECTION STATUS -->
 
-    <div class="status-card">
+    <div class="status">
 
-        <h2>Classroom Status</h2>
+        System Status:
 
-        <div id="classroomStatus" class="status">
-            Loading...
-        </div>
+        <span id="connectionStatus"
+              class="disconnected">
 
-        <div id="energySavingStatus">
-            Loading...
-        </div>
+            Checking...
+
+        </span>
 
     </div>
 
 
-    <!-- ENVIRONMENT -->
+    <!-- SENSOR DATA -->
 
     <div class="grid">
 
@@ -313,13 +390,10 @@
 
             <h3>🌡 Temperature</h3>
 
-            <div class="value">
+            <div class="value"
+                 id="temperature">
 
-                <span id="temperature">--</span>
-
-                <span class="unit">
-                    °C
-                </span>
+                -- °C
 
             </div>
 
@@ -330,13 +404,10 @@
 
             <h3>💧 Humidity</h3>
 
-            <div class="value">
+            <div class="value"
+                 id="humidity">
 
-                <span id="humidity">--</span>
-
-                <span class="unit">
-                    %
-                </span>
+                -- %
 
             </div>
 
@@ -347,13 +418,10 @@
 
             <h3>⚡ Current Power</h3>
 
-            <div class="value">
+            <div class="value"
+                 id="currentPower">
 
-                <span id="currentPower">--</span>
-
-                <span class="unit">
-                    W
-                </span>
+                -- W
 
             </div>
 
@@ -362,15 +430,12 @@
 
         <div class="card">
 
-            <h3>📊 Average Power</h3>
+            <h3>🏫 Classroom</h3>
 
-            <div class="value">
+            <div class="value"
+                 id="classroomStatus">
 
-                <span id="averagePower">--</span>
-
-                <span class="unit">
-                    W
-                </span>
+                --
 
             </div>
 
@@ -379,211 +444,69 @@
     </div>
 
 
-    <!-- POWER STATISTICS -->
+    <!-- ZONES -->
 
-    <div class="grid">
+    <div class="section">
 
-        <div class="card">
+        <h2>Classroom Zones</h2>
 
-            <h3>Maximum Power</h3>
+        <div class="zones">
 
-            <div class="value">
+            <div class="zone"
+                 id="zone1">
 
-                <span id="maximumPower">--</span>
+                <h3>Zone 1</h3>
 
-                <span class="unit">
-                    W
-                </span>
+                <p id="zone1Status">
+                    Waiting...
+                </p>
 
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>Minimum Power</h3>
-
-            <div class="value">
-
-                <span id="minimumPower">--</span>
-
-                <span class="unit">
-                    W
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>Maximum Possible Power</h3>
-
-            <div class="value">
-
-                <span id="maximumPossiblePower">--</span>
-
-                <span class="unit">
-                    W
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <div class="card">
-
-            <h3>Sensor Records</h3>
-
-            <div class="value" id="totalRecords">
-                --
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ENERGY ANALYSIS -->
-
-    <div class="energy-section">
-
-        <h2>🌱 Energy Analysis</h2>
-
-        <div class="grid">
-
-            <div class="card energy-card">
-
-                <h3>⚡ Energy Consumed</h3>
-
-                <div class="value">
-
-                    <span id="energyConsumed">
+                <p>
+                    Light:
+                    <strong id="zone1Light">
                         --
-                    </span>
-
-                    <span class="unit">
-                        kWh
-                    </span>
-
-                </div>
+                    </strong>
+                </p>
 
             </div>
 
 
-            <div class="card energy-card">
+            <div class="zone"
+                 id="zone2">
 
-                <h3>🌱 Energy Saved</h3>
+                <h3>Zone 2</h3>
 
-                <div class="value saving">
+                <p id="zone2Status">
+                    Waiting...
+                </p>
 
-                    <span id="energySaved">
+                <p>
+                    Light:
+                    <strong id="zone2Light">
                         --
-                    </span>
-
-                    <span class="unit">
-                        kWh
-                    </span>
-
-                </div>
+                    </strong>
+                </p>
 
             </div>
 
 
-            <div class="card energy-card">
+            <div class="zone"
+                 id="zone3">
 
-                <h3>📊 Energy Saving</h3>
+                <h3>Zone 3</h3>
 
-                <div class="value saving">
+                <p id="zone3Status">
+                    Waiting...
+                </p>
 
-                    <span id="energySavingPercentage">
+                <p>
+                    Light:
+                    <strong id="zone3Light">
                         --
-                    </span>
-
-                    <span class="unit">
-                        %
-                    </span>
-
-                </div>
+                    </strong>
+                </p>
 
             </div>
-
-
-            <div class="card energy-card">
-
-                <h3>💰 Estimated Electricity Cost</h3>
-
-                <div class="value cost">
-
-                    ₹<span id="estimatedCost">
-                        --
-                    </span>
-
-                </div>
-
-                <div class="unit">
-
-                    Tariff:
-                    ₹<span id="tariff">
-                        --
-                    </span>/kWh
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- CLASSROOM ZONES -->
-
-    <div class="zones">
-
-        <h2>📍 Classroom Zones</h2>
-
-        <br>
-
-
-        <div class="zone">
-
-            <span class="zone-name">
-                Zone 1
-            </span>
-
-            <span id="zone1" class="zone-status">
-                --
-            </span>
-
-        </div>
-
-
-        <div class="zone">
-
-            <span class="zone-name">
-                Zone 2
-            </span>
-
-            <span id="zone2" class="zone-status">
-                --
-            </span>
-
-        </div>
-
-
-        <div class="zone">
-
-            <span class="zone-name">
-                Zone 3
-            </span>
-
-            <span id="zone3" class="zone-status">
-                --
-            </span>
 
         </div>
 
@@ -592,74 +515,80 @@
 
     <!-- DEVICE STATUS -->
 
-    <div class="devices">
+    <div class="section">
 
-        <h2>🔌 Device Status</h2>
+        <h2>Device Status</h2>
 
-        <br>
+        <div class="device-grid">
 
+            <div class="device">
 
-        <div class="device">
+                <h3>💡 Light 1</h3>
 
-            <span class="device-name">
-                💡 Light 1
-            </span>
+                <div id="light1Status"
+                     class="device-status off">
 
-            <strong id="light1" class="device-status">
-                --
-            </strong>
+                    OFF
 
-        </div>
+                </div>
 
-
-        <div class="device">
-
-            <span class="device-name">
-                💡 Light 2
-            </span>
-
-            <strong id="light2" class="device-status">
-                --
-            </strong>
-
-        </div>
+            </div>
 
 
-        <div class="device">
+            <div class="device">
 
-            <span class="device-name">
-                💡 Light 3
-            </span>
+                <h3>💡 Light 2</h3>
 
-            <strong id="light3" class="device-status">
-                --
-            </strong>
+                <div id="light2Status"
+                     class="device-status off">
 
-        </div>
+                    OFF
 
+                </div>
 
-        <div class="device">
-
-            <span class="device-name">
-                🌀 Fan
-            </span>
-
-            <strong id="fan" class="device-status">
-                --
-            </strong>
-
-        </div>
+            </div>
 
 
-        <div class="device">
+            <div class="device">
 
-            <span class="device-name">
-                ❄️ AC
-            </span>
+                <h3>💡 Light 3</h3>
 
-            <strong id="ac" class="device-status">
-                --
-            </strong>
+                <div id="light3Status"
+                     class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>🌀 Fan</h3>
+
+                <div id="fanStatus"
+                     class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>❄ AC</h3>
+
+                <div id="acStatus"
+                     class="device-status off">
+
+                    OFF
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -668,634 +597,631 @@
 
     <!-- MANUAL CONTROL -->
 
-    <div class="control-section">
+    <div class="section">
 
-        <h2>🎛 Manual Control</h2>
+        <h2>Manual Control</h2>
 
+        <p style="margin-bottom:15px;color:#64748b;">
 
-        <div class="device">
+            Use these buttons to remotely control
+            classroom devices.
 
-            <span class="device-name">
-                💡 Light 1
-            </span>
-
-            <button
-                class="control-button"
-                onclick="manualControl('light1')">
-
-                Toggle
-
-            </button>
-
-        </div>
+        </p>
 
 
-        <div class="device">
-
-            <span class="device-name">
-                💡 Light 2
-            </span>
-
-            <button
-                class="control-button"
-                onclick="manualControl('light2')">
-
-                Toggle
-
-            </button>
-
-        </div>
+        <div class="device-grid">
 
 
-        <div class="device">
+            <div class="device">
 
-            <span class="device-name">
-                💡 Light 3
-            </span>
+                <h3>💡 Light 1</h3>
 
-            <button
-                class="control-button"
-                onclick="manualControl('light3')">
+                <button
+                    onclick="manualControl('light1')">
 
-                Toggle
+                    Toggle
 
-            </button>
+                </button>
 
-        </div>
+            </div>
 
 
-        <div class="device">
+            <div class="device">
 
-            <span class="device-name">
-                🌀 Fan
-            </span>
+                <h3>💡 Light 2</h3>
 
-            <button
-                class="control-button"
-                onclick="manualControl('fan')">
+                <button
+                    onclick="manualControl('light2')">
 
-                Toggle
+                    Toggle
 
-            </button>
+                </button>
 
-        </div>
+            </div>
 
 
-        <div class="device">
+            <div class="device">
 
-            <span class="device-name">
-                ❄️ AC
-            </span>
+                <h3>💡 Light 3</h3>
 
-            <button
-                class="control-button"
-                onclick="manualControl('ac')">
+                <button
+                    onclick="manualControl('light3')">
 
-                Toggle
+                    Toggle
 
-            </button>
+                </button>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>🌀 Fan</h3>
+
+                <button
+                    onclick="manualControl('fan')">
+
+                    Toggle
+
+                </button>
+
+            </div>
+
+
+            <div class="device">
+
+                <h3>❄ AC</h3>
+
+                <button
+                    onclick="manualControl('ac')">
+
+                    Toggle
+
+                </button>
+
+            </div>
 
         </div>
 
 
-        <div class="control-note">
+        <br>
 
-            ⚠️ Manual control is currently in
-            demonstration mode. Actual ESP32
-            control will be connected next.
+        <button
+            class="reset"
+            onclick="resetControls()">
+
+            Reset All Controls
+
+        </button>
+
+    </div>
+
+
+    <!-- ENERGY -->
+
+    <div class="section">
+
+        <h2>Energy Monitoring</h2>
+
+        <div class="energy-grid">
+
+            <div class="energy-item">
+
+                <h4>Average Power</h4>
+
+                <strong id="averagePower">
+                    -- W
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>Energy Consumed</h4>
+
+                <strong id="energyConsumed">
+                    -- kWh
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>Energy Saved</h4>
+
+                <strong id="energySaved">
+                    -- kWh
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>Saving</h4>
+
+                <strong id="savingPercentage">
+                    -- %
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>Estimated Cost</h4>
+
+                <strong id="estimatedCost">
+                    ₹ --
+                </strong>
+
+            </div>
+
+
+            <div class="energy-item">
+
+                <h4>Records</h4>
+
+                <strong id="totalRecords">
+                    0
+                </strong>
+
+            </div>
 
         </div>
 
     </div>
 
 
-    <!-- CONNECTION -->
+    <!-- LAST UPDATE -->
 
-    <div class="status-card">
+    <div class="status">
 
-        <p>
+        Last Update:
 
-            Backend Connection:
-
-            <span id="connection">
-                Checking...
-            </span>
-
-        </p>
-
-
-        <p style="margin-top:10px;">
-
-            Last Update:
-
-            <span id="lastUpdate">
-                --
-            </span>
-
-        </p>
+        <span id="lastUpdate">
+            --
+        </span>
 
     </div>
+
 
 </div>
 
 
-<!-- FOOTER -->
-
 <div class="footer">
 
     Smart Classroom Energy Saving System
-
-    <br>
-
-    SIH2026 Prototype
 
 </div>
 
 
 <script>
 
-const API_URL = "/api";
+
+// ==========================================
+// API BASE
+// ==========================================
+
+const API_BASE = "";
 
 
-/* ==========================================
-   DEVICE STATUS
-========================================== */
+// ==========================================
+// UPDATE DEVICE STATUS
+// ==========================================
 
-function setDeviceStatus(elementId, state) {
+function updateDeviceStatus(
+    elementId,
+    state
+) {
 
     const element =
         document.getElementById(elementId);
 
     if (state == 1) {
 
-        element.innerText = "ON";
+        element.textContent = "ON";
 
         element.className =
             "device-status on";
 
     } else {
 
-        element.innerText = "OFF";
+        element.textContent = "OFF";
 
         element.className =
             "device-status off";
-
     }
-
 }
 
 
-/* ==========================================
-   ZONE STATUS
-========================================== */
-
-function setZoneStatus(elementId, state) {
-
-    const element =
-        document.getElementById(elementId);
-
-
-    if (state == 1) {
-
-        element.innerText =
-            "👤 HUMAN DETECTED";
-
-        element.className =
-            "zone-status on";
-
-    } else {
-
-        element.innerText =
-            "EMPTY";
-
-        element.className =
-            "zone-status off";
-
-    }
-
-}
-
-
-/* ==========================================
-   LIVE DASHBOARD
-========================================== */
+// ==========================================
+// UPDATE DASHBOARD
+// ==========================================
 
 async function updateDashboard() {
 
     try {
 
-        const response =
-            await fetch(API_URL + "/data");
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "API error"
+        const dataResponse =
+            await fetch(
+                API_BASE + "/api/data"
             );
 
-        }
+        const dataResult =
+            await dataResponse.json();
 
 
-        const data =
-            await response.json();
+        const energyResponse =
+            await fetch(
+                API_BASE + "/api/energy"
+            );
+
+        const energy =
+            await energyResponse.json();
 
 
-        /* TEMPERATURE */
+        if (
+            dataResult.success &&
+            dataResult.data
+        ) {
 
-        document.getElementById(
-            "temperature"
-        ).innerText =
-            Number(
-                data.temperature || 0
-            ).toFixed(1);
-
-
-        /* HUMIDITY */
-
-        document.getElementById(
-            "humidity"
-        ).innerText =
-            Number(
-                data.humidity || 0
-            ).toFixed(1);
+            const data =
+                dataResult.data;
 
 
-        /* CURRENT POWER */
+            // SENSOR VALUES
 
-        document.getElementById(
-            "currentPower"
-        ).innerText =
-            Number(
-                data.total_power || 0
-            ).toFixed(0);
-
-
-        /* ENERGY */
-
-        document.getElementById(
-            "energyConsumed"
-        ).innerText =
-            Number(
-                data.energy_consumed_kwh || 0
-            ).toFixed(4);
+            document.getElementById(
+                "temperature"
+            ).textContent =
+                Number(data.temperature)
+                .toFixed(1)
+                + " °C";
 
 
-        document.getElementById(
-            "energySaved"
-        ).innerText =
-            Number(
-                data.energy_saved_kwh || 0
-            ).toFixed(4);
+            document.getElementById(
+                "humidity"
+            ).textContent =
+                Number(data.humidity)
+                .toFixed(1)
+                + " %";
 
 
-        document.getElementById(
-            "energySavingPercentage"
-        ).innerText =
-            Number(
-                data.energy_saving_percentage || 0
-            ).toFixed(2);
+            document.getElementById(
+                "currentPower"
+            ).textContent =
+                energy.current_power
+                + " W";
 
 
-        document.getElementById(
-            "estimatedCost"
-        ).innerText =
-            Number(
-                data.estimated_cost || 0
-            ).toFixed(2);
+            // CLASSROOM STATUS
+
+            const occupied =
+                data.zone1 ||
+                data.zone2 ||
+                data.zone3;
 
 
-        document.getElementById(
-            "maximumPossiblePower"
-        ).innerText =
-            Number(
-                data.maximum_possible_power || 0
-            ).toFixed(0);
-
-
-        /* CLASSROOM STATUS */
-
-        const statusElement =
             document.getElementById(
                 "classroomStatus"
+            ).textContent =
+                occupied
+                ? "OCCUPIED"
+                : "EMPTY";
+
+
+            // ZONE 1
+
+            updateZone(
+                "zone1",
+                "zone1Status",
+                "zone1Light",
+                data.zone1,
+                data.light1
             );
 
 
-        if (
-            data.occupancy ===
-            "OCCUPIED"
-        ) {
+            // ZONE 2
 
-            statusElement.innerText =
-                "🔴 OCCUPIED";
+            updateZone(
+                "zone2",
+                "zone2Status",
+                "zone2Light",
+                data.zone2,
+                data.light2
+            );
 
-            statusElement.className =
-                "status occupied";
 
-        } else {
+            // ZONE 3
 
-            statusElement.innerText =
-                "🟢 EMPTY";
+            updateZone(
+                "zone3",
+                "zone3Status",
+                "zone3Light",
+                data.zone3,
+                data.light3
+            );
 
-            statusElement.className =
-                "status empty";
 
+            // DEVICES
+
+            updateDeviceStatus(
+                "light1Status",
+                data.light1
+            );
+
+            updateDeviceStatus(
+                "light2Status",
+                data.light2
+            );
+
+            updateDeviceStatus(
+                "light3Status",
+                data.light3
+            );
+
+            updateDeviceStatus(
+                "fanStatus",
+                data.fan
+            );
+
+            updateDeviceStatus(
+                "acStatus",
+                data.ac
+            );
+
+
+            document.getElementById(
+                "connectionStatus"
+            ).textContent =
+                "CONNECTED";
+
+
+            document.getElementById(
+                "connectionStatus"
+            ).className =
+                "connected";
+
+
+            document.getElementById(
+                "lastUpdate"
+            ).textContent =
+                data.timestamp;
         }
 
 
-        /* ENERGY SAVING STATUS */
-
-        const savingElement =
-            document.getElementById(
-                "energySavingStatus"
-            );
-
-
-        if (
-            data.energy_saving_active
-        ) {
-
-            savingElement.innerText =
-                "🌱 ENERGY SAVING ACTIVE";
-
-            savingElement.className =
-                "energy-active";
-
-        } else {
-
-            savingElement.innerText =
-                "⚡ NORMAL OPERATION";
-
-            savingElement.className =
-                "energy-inactive";
-
-        }
-
-
-        /* ZONES */
-
-        setZoneStatus(
-            "zone1",
-            data.zone1
-        );
-
-        setZoneStatus(
-            "zone2",
-            data.zone2
-        );
-
-        setZoneStatus(
-            "zone3",
-            data.zone3
-        );
-
-
-        /* DEVICES */
-
-        setDeviceStatus(
-            "light1",
-            data.light1
-        );
-
-        setDeviceStatus(
-            "light2",
-            data.light2
-        );
-
-        setDeviceStatus(
-            "light3",
-            data.light3
-        );
-
-        setDeviceStatus(
-            "fan",
-            data.fan
-        );
-
-        setDeviceStatus(
-            "ac",
-            data.ac
-        );
-
-
-        /* CONNECTION */
-
-        const connection =
-            document.getElementById(
-                "connection"
-            );
-
-
-        connection.innerText =
-            "CONNECTED";
-
-        connection.className =
-            "connected";
-
-
-        document.getElementById(
-            "lastUpdate"
-        ).innerText =
-            new Date().toLocaleTimeString();
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        const connection =
-            document.getElementById(
-                "connection"
-            );
-
-
-        connection.innerText =
-            "DISCONNECTED";
-
-        connection.className =
-            "disconnected";
-
-    }
-
-}
-
-
-/* ==========================================
-   ENERGY STATISTICS
-========================================== */
-
-async function updateEnergyStatistics() {
-
-    try {
-
-        const response =
-            await fetch(
-                API_URL + "/energy"
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Energy API error"
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        /* AVERAGE */
+        // ENERGY
 
         document.getElementById(
             "averagePower"
-        ).innerText =
-            Number(
-                data.average_power || 0
-            ).toFixed(0);
+        ).textContent =
+            energy.average_power
+            + " W";
 
-
-        /* MAXIMUM */
-
-        document.getElementById(
-            "maximumPower"
-        ).innerText =
-            Number(
-                data.maximum_power || 0
-            ).toFixed(0);
-
-
-        /* MINIMUM */
-
-        document.getElementById(
-            "minimumPower"
-        ).innerText =
-            Number(
-                data.minimum_power || 0
-            ).toFixed(0);
-
-
-        /* RECORDS */
-
-        document.getElementById(
-            "totalRecords"
-        ).innerText =
-            data.total_records || 0;
-
-
-        /* ENERGY CONSUMED */
 
         document.getElementById(
             "energyConsumed"
-        ).innerText =
-            Number(
-                data.energy_consumed_kwh || 0
-            ).toFixed(4);
+        ).textContent =
+            energy.energy_consumed_kwh
+            + " kWh";
 
-
-        /* ENERGY SAVED */
 
         document.getElementById(
             "energySaved"
-        ).innerText =
-            Number(
-                data.energy_saved_kwh || 0
-            ).toFixed(4);
+        ).textContent =
+            energy.energy_saved_kwh
+            + " kWh";
 
-
-        /* SAVING PERCENTAGE */
 
         document.getElementById(
-            "energySavingPercentage"
-        ).innerText =
-            Number(
-                data.energy_saving_percentage || 0
-            ).toFixed(2);
+            "savingPercentage"
+        ).textContent =
+            energy.energy_saving_percentage
+            + " %";
 
-
-        /* COST */
 
         document.getElementById(
             "estimatedCost"
-        ).innerText =
-            Number(
-                data.estimated_cost || 0
-            ).toFixed(2);
+        ).textContent =
+            "₹ "
+            + energy.estimated_cost;
 
-
-        /* MAXIMUM POSSIBLE POWER */
 
         document.getElementById(
-            "maximumPossiblePower"
-        ).innerText =
-            Number(
-                data.maximum_possible_power || 0
-            ).toFixed(0);
-
-
-        /* TARIFF */
-
-        document.getElementById(
-            "tariff"
-        ).innerText =
-            Number(
-                data.electricity_tariff || 0
-            ).toFixed(2);
+            "totalRecords"
+        ).textContent =
+            energy.total_records;
 
 
     } catch (error) {
 
         console.error(
-            "Energy statistics error:",
+            "Dashboard error:",
             error
         );
 
-    }
 
+        document.getElementById(
+            "connectionStatus"
+        ).textContent =
+            "DISCONNECTED";
+
+
+        document.getElementById(
+            "connectionStatus"
+        ).className =
+            "disconnected";
+    }
 }
 
 
-/* ==========================================
-   MANUAL CONTROL
-========================================== */
+// ==========================================
+// ZONE UPDATE
+// ==========================================
+
+function updateZone(
+    zoneId,
+    statusId,
+    lightId,
+    human,
+    light
+) {
+
+    const zone =
+        document.getElementById(zoneId);
+
+    const status =
+        document.getElementById(statusId);
+
+    const lightElement =
+        document.getElementById(lightId);
+
+
+    if (human) {
+
+        zone.className =
+            "zone active";
+
+        status.textContent =
+            "👤 HUMAN DETECTED";
+
+    } else {
+
+        zone.className =
+            "zone empty";
+
+        status.textContent =
+            "EMPTY";
+    }
+
+
+    lightElement.textContent =
+        light
+        ? "ON"
+        : "OFF";
+}
+
+
+// ==========================================
+// MANUAL CONTROL
+// ==========================================
 
 async function manualControl(device) {
 
     try {
 
-        // Get current device state
+        // Get current state
+
         const currentResponse =
-            await fetch("/api/control");
+            await fetch(
+                API_BASE + "/api/control"
+            );
+
 
         const currentData =
             await currentResponse.json();
 
+
         const currentState =
             currentData.controls[device] || 0;
 
+
         // Toggle state
+
         const newState =
-            currentState === 1 ? 0 : 1;
+            currentState === 1
+            ? 0
+            : 1;
 
-        // Send command to Flask
+
+        // Send command
+
         const response =
-            await fetch("/api/control", {
+            await fetch(
+                API_BASE + "/api/control",
+                {
+                    method: "POST",
 
-                method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                    body: JSON.stringify({
 
-                body: JSON.stringify({
-                    device: device,
-                    state: newState
-                })
+                        device: device,
 
-            });
+                        state: newState
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "Control failed"
+            );
+        }
+
+
+        console.log(
+            device
+            + " -> "
+            + (
+                newState === 1
+                ? "ON"
+                : "OFF"
+            )
+        );
+
+
+        // Refresh dashboard
+
+        updateDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Manual control error:",
+            error
+        );
+
+
+        alert(
+            "Unable to control "
+            + device
+            + ". Please try again."
+        );
+    }
+}
+
+
+// ==========================================
+// RESET CONTROLS
+// ==========================================
+
+async function resetControls() {
+
+    try {
+
+        const response =
+            await fetch(
+                API_BASE
+                + "/api/control/reset",
+                {
+                    method: "POST"
+                }
+            );
 
 
         const result =
@@ -1305,55 +1231,48 @@ async function manualControl(device) {
         if (result.success) {
 
             alert(
-                device.toUpperCase() +
-                " → " +
-                (newState === 1 ? "ON" : "OFF")
+                "All manual controls reset."
             );
+
+            updateDashboard();
 
         } else {
 
             alert(
-                "Control failed: " +
-                result.message
+                "Reset failed."
             );
-
         }
+
 
     } catch (error) {
 
-        console.error(error);
-
-        alert(
-            "Unable to connect to the control server."
+        console.error(
+            "Reset error:",
+            error
         );
 
+        alert(
+            "Unable to reset controls."
+        );
     }
-
 }
 
 
-/* ==========================================
-   START DASHBOARD
-========================================== */
+// ==========================================
+// AUTO REFRESH
+// ==========================================
 
 updateDashboard();
 
-updateEnergyStatistics();
-
-
-/* Refresh every 2 seconds */
 
 setInterval(
     updateDashboard,
     2000
 );
 
-setInterval(
-    updateEnergyStatistics,
-    2000
-);
 
 </script>
 
 </body>
+
 </html>
