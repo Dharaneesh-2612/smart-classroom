@@ -136,14 +136,9 @@ def receive_data():
         print("          ESP32 DATA RECEIVED")
         print("======================================")
 
-        print("Zone 1:",
-              record["zone1"])
-
-        print("Zone 2:",
-              record["zone2"])
-
-        print("Zone 3:",
-              record["zone3"])
+        print("Zone 1:", record["zone1"])
+        print("Zone 2:", record["zone2"])
+        print("Zone 3:", record["zone3"])
 
         print("Temperature:",
               record["temperature"])
@@ -190,6 +185,7 @@ def receive_data():
             "success": False,
 
             "message": str(e)
+
         }), 400
 
 
@@ -233,15 +229,14 @@ def get_history():
 
 
 # =========================================================
-# ENERGY CALCULATION
+# ENERGY CALCULATION HELPER
 # =========================================================
 
-@app.route("/api/energy", methods=["GET"])
-def get_energy():
+def calculate_energy():
 
     if not records:
 
-        return jsonify({
+        return {
 
             "average_power": 0,
 
@@ -266,18 +261,21 @@ def get_energy():
                 ELECTRICITY_TARIFF,
 
             "total_records": 0
-        })
+        }
 
 
     power_values = []
 
+
+    # -----------------------------------------------------
+    # Calculate power for every record
+    # -----------------------------------------------------
 
     for record in records:
 
         power = 0
 
         # Lights
-
         power += (
             record["light1"]
             * LIGHT_POWER
@@ -294,14 +292,12 @@ def get_energy():
         )
 
         # Fan
-
         power += (
             record["fan"]
             * FAN_POWER
         )
 
         # AC
-
         power += (
             record["ac"]
             * AC_POWER
@@ -310,14 +306,16 @@ def get_energy():
         power_values.append(power)
 
 
+    # -----------------------------------------------------
     # Current power
+    # -----------------------------------------------------
 
-    current_power = (
-        power_values[-1]
-    )
+    current_power = power_values[-1]
 
 
+    # -----------------------------------------------------
     # Average power
+    # -----------------------------------------------------
 
     average_power = (
         sum(power_values)
@@ -326,7 +324,9 @@ def get_energy():
     )
 
 
-    # Maximum / minimum
+    # -----------------------------------------------------
+    # Maximum and minimum power
+    # -----------------------------------------------------
 
     maximum_power = max(
         power_values
@@ -337,15 +337,16 @@ def get_energy():
     )
 
 
-    # ESP32 sends approximately
-    # every 5 seconds
+    # -----------------------------------------------------
+    # ESP32 sends approximately every 5 seconds
+    # -----------------------------------------------------
 
-    interval_hours = (
-        5 / 3600
-    )
+    interval_hours = 5 / 3600
 
 
+    # -----------------------------------------------------
     # Energy consumed
+    # -----------------------------------------------------
 
     energy_consumed_kwh = (
 
@@ -357,7 +358,9 @@ def get_energy():
     )
 
 
+    # -----------------------------------------------------
     # Energy saved
+    # -----------------------------------------------------
 
     energy_saved_kwh = (
 
@@ -379,7 +382,9 @@ def get_energy():
     )
 
 
+    # -----------------------------------------------------
     # Saving percentage
+    # -----------------------------------------------------
 
     saving_percentage = 0
 
@@ -404,10 +409,13 @@ def get_energy():
                 energy_saved_kwh
                 /
                 maximum_energy
+
             ) * 100
 
 
-    # Estimated cost
+    # -----------------------------------------------------
+    # Estimated electricity cost
+    # -----------------------------------------------------
 
     estimated_cost = (
 
@@ -417,7 +425,7 @@ def get_energy():
     )
 
 
-    return jsonify({
+    return {
 
         "average_power":
             round(
@@ -469,6 +477,64 @@ def get_energy():
 
         "total_records":
             len(records)
+    }
+
+
+# =========================================================
+# GET ENERGY DATA
+# =========================================================
+
+@app.route("/api/energy", methods=["GET"])
+def get_energy():
+
+    return jsonify(
+        calculate_energy()
+    )
+
+
+# =========================================================
+# NEW FAST DASHBOARD API
+# =========================================================
+
+@app.route("/api/dashboard", methods=["GET"])
+def get_dashboard():
+
+    # Latest sensor data
+    if records:
+
+        latest_data = records[-1]
+
+    else:
+
+        latest_data = None
+
+
+    # Energy information
+    energy_data = calculate_energy()
+
+
+    # Combined dashboard response
+    return jsonify({
+
+        "success": True,
+
+        "data":
+            latest_data,
+
+        "energy":
+            energy_data,
+
+        "mode":
+            control_mode,
+
+        "controls":
+            manual_controls,
+
+        "server_time":
+            datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+
     })
 
 
@@ -483,7 +549,8 @@ def get_mode():
 
         "success": True,
 
-        "mode": control_mode
+        "mode":
+            control_mode
     })
 
 
@@ -498,6 +565,7 @@ def change_mode():
 
     data = request.get_json()
 
+
     if not data:
 
         return jsonify({
@@ -506,6 +574,7 @@ def change_mode():
 
             "message":
                 "No mode received"
+
         }), 400
 
 
@@ -523,6 +592,7 @@ def change_mode():
 
             "message":
                 "Invalid mode. Use AUTO or MANUAL."
+
         }), 400
 
 
@@ -552,6 +622,7 @@ def change_mode():
         "message":
             "Control mode changed to "
             + control_mode
+
     })
 
 
@@ -573,6 +644,7 @@ def manual_control():
 
             "message":
                 "No control data received"
+
         }), 400
 
 
@@ -585,7 +657,9 @@ def manual_control():
     )
 
 
+    # -----------------------------------------------------
     # Validate device
+    # -----------------------------------------------------
 
     if device not in manual_controls:
 
@@ -595,10 +669,29 @@ def manual_control():
 
             "message":
                 "Invalid device"
+
         }), 400
 
 
+    # -----------------------------------------------------
     # Validate state
+    # -----------------------------------------------------
+
+    try:
+
+        state = int(state)
+
+    except:
+
+        return jsonify({
+
+            "success": False,
+
+            "message":
+                "Invalid state"
+
+        }), 400
+
 
     if state not in [0, 1]:
 
@@ -608,10 +701,13 @@ def manual_control():
 
             "message":
                 "Invalid state"
+
         }), 400
 
 
+    # -----------------------------------------------------
     # Save state
+    # -----------------------------------------------------
 
     manual_controls[
         device
@@ -757,4 +853,5 @@ if __name__ == "__main__":
         port=5000,
 
         debug=True
+
     )
