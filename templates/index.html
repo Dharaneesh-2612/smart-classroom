@@ -1,132 +1,988 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Smart Classroom Dashboard</title>
+    <title>Smart Classroom Energy Monitor</title>
 
     <style>
 
-        body {
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            text-align: center;
-            padding: 40px;
         }
 
-        .dashboard {
-            max-width: 900px;
-            margin: auto;
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            margin-top: 7px;
+            color: #cbd5e1;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 25px auto;
+        }
+
+        .status-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .status {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .online {
+            color: #16a34a;
+        }
+
+        .offline {
+            color: #dc2626;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 20px;
         }
 
         .card {
-            display: inline-block;
             background: white;
-            padding: 25px;
-            margin: 10px;
-            width: 180px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #475569;
+            margin-bottom: 12px;
+            font-size: 16px;
         }
 
         .value {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: bold;
-            margin-top: 10px;
+            color: #172554;
+        }
+
+        .unit {
+            font-size: 16px;
+            color: #64748b;
+        }
+
+        .section-title {
+            margin: 25px 0 15px;
+            color: #172554;
+        }
+
+        .device {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .device:last-child {
+            border-bottom: none;
+        }
+
+        .device-name {
+            font-weight: bold;
+        }
+
+        .badge {
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .on {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .off {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .saving {
+            background: #dcfce7;
+            color: #166534;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .not-saving {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .status-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
         }
 
     </style>
-
 </head>
+
 
 <body>
 
-    <div class="dashboard">
+    <!-- HEADER -->
 
-        <h1>Smart Classroom Dashboard</h1>
+    <header>
 
-        <div class="card">
-            <h3>Temperature</h3>
-            <div class="value" id="temperature">--</div>
+        <h1>🏫 Smart Classroom Energy Monitor</h1>
+
+        <p>
+            IoT Based Automatic Energy Management System
+        </p>
+
+    </header>
+
+
+    <div class="container">
+
+
+        <!-- CLASSROOM STATUS -->
+
+        <div class="status-bar">
+
+            <div>
+
+                <div class="status" id="classroomStatus">
+                    Loading...
+                </div>
+
+                <p id="lastUpdate">
+                    Last update: --
+                </p>
+
+            </div>
+
+
+            <div id="connectionStatus"
+                 class="online">
+
+                ● CONNECTING
+
+            </div>
+
         </div>
 
-        <div class="card">
-            <h3>Humidity</h3>
-            <div class="value" id="humidity">--</div>
+
+
+        <!-- ENERGY SAVING -->
+
+        <div id="savingBox"
+             class="saving">
+
+            Checking energy-saving status...
+
         </div>
 
-        <div class="card">
-            <h3>Zone 1</h3>
-            <div class="value" id="zone1">--</div>
+
+
+        <!-- TEMPERATURE / HUMIDITY / POWER -->
+
+        <div class="grid">
+
+
+            <div class="card">
+
+                <h3>🌡️ Temperature</h3>
+
+                <div class="value">
+
+                    <span id="temperature">
+                        --
+                    </span>
+
+                    <span class="unit">
+                        °C
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>💧 Humidity</h3>
+
+                <div class="value">
+
+                    <span id="humidity">
+                        --
+                    </span>
+
+                    <span class="unit">
+                        %
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>⚡ Current Power</h3>
+
+                <div class="value">
+
+                    <span id="currentPower">
+                        --
+                    </span>
+
+                    <span class="unit">
+                        W
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>📊 Average Power</h3>
+
+                <div class="value">
+
+                    <span id="averagePower">
+                        --
+                    </span>
+
+                    <span class="unit">
+                        W
+                    </span>
+
+                </div>
+
+            </div>
+
+
         </div>
 
-        <div class="card">
-            <h3>Zone 2</h3>
-            <div class="value" id="zone2">--</div>
+
+
+        <!-- ENERGY STATISTICS -->
+
+        <h2 class="section-title">
+            ⚡ Energy Statistics
+        </h2>
+
+
+        <div class="grid">
+
+
+            <div class="card">
+
+                <h3>Maximum Power</h3>
+
+                <div class="value">
+
+                    <span id="maximumPower">
+                        --
+                    </span>
+
+                    <span class="unit">
+                        W
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Minimum Power</h3>
+
+                <div class="value">
+
+                    <span id="minimumPower">
+                        --
+                    </span>
+
+                    <span class="unit">
+                        W
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Sensor Records</h3>
+
+                <div class="value">
+
+                    <span id="totalRecords">
+                        --
+                    </span>
+
+                </div>
+
+            </div>
+
+
         </div>
 
-        <div class="card">
-            <h3>Zone 3</h3>
-            <div class="value" id="zone3">--</div>
-        </div>
+
+
+        <!-- ZONES -->
+
+        <h2 class="section-title">
+            👥 Classroom Zones
+        </h2>
+
 
         <div class="card">
-            <h3>Fan</h3>
-            <div class="value" id="fan">--</div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    Zone 1
+                </span>
+
+                <span id="zone1"
+                      class="badge off">
+
+                    EMPTY
+
+                </span>
+
+            </div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    Zone 2
+                </span>
+
+                <span id="zone2"
+                      class="badge off">
+
+                    EMPTY
+
+                </span>
+
+            </div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    Zone 3
+                </span>
+
+                <span id="zone3"
+                      class="badge off">
+
+                    EMPTY
+
+                </span>
+
+            </div>
+
+
         </div>
 
+
+
+        <!-- DEVICES -->
+
+        <h2 class="section-title">
+            💡 Classroom Devices
+        </h2>
+
+
         <div class="card">
-            <h3>AC</h3>
-            <div class="value" id="ac">--</div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    💡 Zone 1 Light
+                </span>
+
+                <span id="light1"
+                      class="badge off">
+
+                    OFF
+
+                </span>
+
+            </div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    💡 Zone 2 Light
+                </span>
+
+                <span id="light2"
+                      class="badge off">
+
+                    OFF
+
+                </span>
+
+            </div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    💡 Zone 3 Light
+                </span>
+
+                <span id="light3"
+                      class="badge off">
+
+                    OFF
+
+                </span>
+
+            </div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    🌀 Fan
+                </span>
+
+                <span id="fan"
+                      class="badge off">
+
+                    OFF
+
+                </span>
+
+            </div>
+
+
+            <div class="device">
+
+                <span class="device-name">
+                    ❄️ Air Conditioner
+                </span>
+
+                <span id="ac"
+                      class="badge off">
+
+                    OFF
+
+                </span>
+
+            </div>
+
+
         </div>
+
 
     </div>
 
 
+
+    <footer>
+
+        Smart Classroom Energy Saving System
+        <br>
+
+        ESP32 + PIR + DHT22 + Flask
+
+    </footer>
+
+
+
     <script>
 
-        async function updateDashboard() {
+        // ==========================================
+        // GET SENSOR DATA
+        // ==========================================
+
+        async function getSensorData() {
 
             try {
 
-                const response = await fetch("/api/data");
+                const response =
+                    await fetch("/api/data");
 
-                const data = await response.json();
 
-                document.getElementById("temperature").innerText =
-                    data.temperature + " °C";
+                if (!response.ok) {
 
-                document.getElementById("humidity").innerText =
-                    data.humidity + " %";
+                    throw new Error(
+                        "Server error"
+                    );
 
-                document.getElementById("zone1").innerText =
-                    data.zone1 ? "HUMAN" : "EMPTY";
+                }
 
-                document.getElementById("zone2").innerText =
-                    data.zone2 ? "HUMAN" : "EMPTY";
 
-                document.getElementById("zone3").innerText =
-                    data.zone3 ? "HUMAN" : "EMPTY";
+                const data =
+                    await response.json();
 
-                document.getElementById("fan").innerText =
-                    data.fan ? "ON" : "OFF";
 
-                document.getElementById("ac").innerText =
-                    data.ac ? "ON" : "OFF";
+                if (
+                    data.message ===
+                    "No data available"
+                ) {
+
+                    return;
+                }
+
+
+                // ------------------------------
+                // CONNECTION
+                // ------------------------------
+
+                document
+                    .getElementById(
+                        "connectionStatus"
+                    )
+                    .innerText =
+                    "● CONNECTED";
+
+
+                document
+                    .getElementById(
+                        "connectionStatus"
+                    )
+                    .className =
+                    "online";
+
+
+                // ------------------------------
+                // CLASSROOM STATUS
+                // ------------------------------
+
+                document
+                    .getElementById(
+                        "classroomStatus"
+                    )
+                    .innerText =
+                    data.occupancy ||
+                    "UNKNOWN";
+
+
+                // ------------------------------
+                // TEMPERATURE
+                // ------------------------------
+
+                document
+                    .getElementById(
+                        "temperature"
+                    )
+                    .innerText =
+                    Number(
+                        data.temperature || 0
+                    ).toFixed(1);
+
+
+                // ------------------------------
+                // HUMIDITY
+                // ------------------------------
+
+                document
+                    .getElementById(
+                        "humidity"
+                    )
+                    .innerText =
+                    Number(
+                        data.humidity || 0
+                    ).toFixed(1);
+
+
+                // ------------------------------
+                // ZONES
+                // ------------------------------
+
+                updateBadge(
+                    "zone1",
+                    data.zone1,
+                    "HUMAN",
+                    "EMPTY"
+                );
+
+                updateBadge(
+                    "zone2",
+                    data.zone2,
+                    "HUMAN",
+                    "EMPTY"
+                );
+
+                updateBadge(
+                    "zone3",
+                    data.zone3,
+                    "HUMAN",
+                    "EMPTY"
+                );
+
+
+                // ------------------------------
+                // DEVICES
+                // ------------------------------
+
+                updateBadge(
+                    "light1",
+                    data.light1,
+                    "ON",
+                    "OFF"
+                );
+
+                updateBadge(
+                    "light2",
+                    data.light2,
+                    "ON",
+                    "OFF"
+                );
+
+                updateBadge(
+                    "light3",
+                    data.light3,
+                    "ON",
+                    "OFF"
+                );
+
+                updateBadge(
+                    "fan",
+                    data.fan,
+                    "ON",
+                    "OFF"
+                );
+
+                updateBadge(
+                    "ac",
+                    data.ac,
+                    "ON",
+                    "OFF"
+                );
+
+
+                // ------------------------------
+                // LAST UPDATE
+                // ------------------------------
+
+                if (data.timestamp) {
+
+                    const date =
+                        new Date(
+                            data.timestamp
+                        );
+
+                    document
+                        .getElementById(
+                            "lastUpdate"
+                        )
+                        .innerText =
+                        "Last update: " +
+                        date.toLocaleString();
+
+                }
+
 
             }
 
             catch (error) {
 
-                console.log("Dashboard error:", error);
+                console.log(
+                    "Sensor error:",
+                    error
+                );
+
+
+                document
+                    .getElementById(
+                        "connectionStatus"
+                    )
+                    .innerText =
+                    "● DISCONNECTED";
+
+
+                document
+                    .getElementById(
+                        "connectionStatus"
+                    )
+                    .className =
+                    "offline";
 
             }
 
         }
 
+
+
+        // ==========================================
+        // UPDATE BADGE
+        // ==========================================
+
+        function updateBadge(
+            id,
+            value,
+            onText,
+            offText
+        ) {
+
+            const element =
+                document.getElementById(id);
+
+
+            if (Number(value) === 1) {
+
+                element.innerText =
+                    onText;
+
+                element.className =
+                    "badge on";
+
+            }
+
+            else {
+
+                element.innerText =
+                    offText;
+
+                element.className =
+                    "badge off";
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // GET ENERGY DATA
+        // ==========================================
+
+        async function getEnergyData() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/energy"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                document
+                    .getElementById(
+                        "currentPower"
+                    )
+                    .innerText =
+                    Number(
+                        data.current_power || 0
+                    ).toFixed(0);
+
+
+                document
+                    .getElementById(
+                        "averagePower"
+                    )
+                    .innerText =
+                    Number(
+                        data.average_power || 0
+                    ).toFixed(0);
+
+
+                document
+                    .getElementById(
+                        "maximumPower"
+                    )
+                    .innerText =
+                    Number(
+                        data.maximum_power || 0
+                    ).toFixed(0);
+
+
+                document
+                    .getElementById(
+                        "minimumPower"
+                    )
+                    .innerText =
+                    Number(
+                        data.minimum_power || 0
+                    ).toFixed(0);
+
+
+                document
+                    .getElementById(
+                        "totalRecords"
+                    )
+                    .innerText =
+                    data.total_records || 0;
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Energy error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // ENERGY SAVING STATUS
+        // ==========================================
+
+        async function getSavingStatus() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/data"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                const box =
+                    document.getElementById(
+                        "savingBox"
+                    );
+
+
+                if (
+                    data.energy_saving_active
+                ) {
+
+                    box.innerText =
+                        "🌱 ENERGY SAVING ACTIVE";
+
+                    box.className =
+                        "saving";
+
+                }
+
+                else {
+
+                    box.innerText =
+                        "⚡ CLASSROOM ACTIVE";
+
+                    box.className =
+                        "saving not-saving";
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.log(
+                    "Saving status error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+
+        // ==========================================
+        // UPDATE EVERYTHING
+        // ==========================================
+
+        async function updateDashboard() {
+
+            await getSensorData();
+
+            await getEnergyData();
+
+            await getSavingStatus();
+
+        }
+
+
+
+        // ==========================================
+        // FIRST LOAD
+        // ==========================================
+
         updateDashboard();
 
-        setInterval(updateDashboard, 2000);
+
+
+        // ==========================================
+        // AUTO REFRESH
+        // ==========================================
+
+        setInterval(
+            updateDashboard,
+            2000
+        );
 
     </script>
 
