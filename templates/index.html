@@ -1262,14 +1262,72 @@ async function updateEnergyStatistics() {
    MANUAL CONTROL
 ========================================== */
 
-function manualControl(device) {
+async function manualControl(device) {
 
-    alert(
-        "Manual control selected for: " +
-        device +
-        "\n\n" +
-        "Actual ESP32 control will be connected in the next step."
-    );
+    try {
+
+        // Get current device state
+        const currentResponse =
+            await fetch("/api/control");
+
+        const currentData =
+            await currentResponse.json();
+
+        const currentState =
+            currentData.controls[device] || 0;
+
+        // Toggle state
+        const newState =
+            currentState === 1 ? 0 : 1;
+
+        // Send command to Flask
+        const response =
+            await fetch("/api/control", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    device: device,
+                    state: newState
+                })
+
+            });
+
+
+        const result =
+            await response.json();
+
+
+        if (result.success) {
+
+            alert(
+                device.toUpperCase() +
+                " → " +
+                (newState === 1 ? "ON" : "OFF")
+            );
+
+        } else {
+
+            alert(
+                "Control failed: " +
+                result.message
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to connect to the control server."
+        );
+
+    }
 
 }
 
